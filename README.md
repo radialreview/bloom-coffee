@@ -16,7 +16,7 @@ Welcome! This repo contains the exercise brief for **Bloom Coffee**, a small cof
 
 **Time:** Please complete within one week of receiving this exercise.
 
-**Questions?** Email (I NEED THE CORRECT EMAIL FOR THIS)
+**Questions?** Email Mike Benner at michael.b@bloomgrowth.com
 
 ---
 
