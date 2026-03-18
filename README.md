@@ -20,7 +20,7 @@ Welcome! This repo contains the exercise brief for **Bloom Coffee**, a small cof
 
 ---
 
-## What we look for (Not sure whether we want to show them this or not)
+## What we look for
 
 Our engineers use a rubric when reviewing your submission. You can see what we evaluate and how we give feedback here: **[RUBRIC.md](RUBRIC.md)**.
 
