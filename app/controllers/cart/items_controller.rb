@@ -34,6 +34,6 @@ class Cart::ItemsController < ApplicationController
   private
 
   def order_item_params
-    params.require(:order_item).permit(:drink_id, :quantity, order_item_add_ons_attributes: [:add_on_id])
+    params.require(:order_item).permit(:drink_id, :quantity, order_item_add_ons_attributes: [ :add_on_id ])
   end
 end
