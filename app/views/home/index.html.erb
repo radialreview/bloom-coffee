@@ -12,12 +12,9 @@
     <p class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-stone-600">
       Order ahead, pick up when it’s ready. Staff use the admin area to keep the menu fresh—customers get the good stuff next.
     </p>
-    <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+    <div class="mt-10">
       <%= link_to menu_index_path, class: "inline-flex items-center justify-center rounded-xl bg-amber-900 px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-amber-900/25 transition hover:bg-amber-800" do %>
         View Menu
-      <% end %>
-      <%= link_to new_user_session_path, class: "inline-flex items-center justify-center rounded-xl border border-stone-300 bg-white px-6 py-3 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-50" do %>
-        Staff sign in
       <% end %>
     </div>
   </div>
