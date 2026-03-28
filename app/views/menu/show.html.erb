@@ -19,7 +19,7 @@
             <% @add_ons.each do |add_on| %>
               <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-stone-200 px-4 py-3 transition hover:border-amber-300 hover:bg-amber-50/30 has-[:checked]:border-amber-400 has-[:checked]:bg-amber-50/50">
                 <input type="checkbox"
-                       name="order_item[add_on_ids][]"
+                       name="order_item[order_item_add_ons_attributes][][add_on_id]"
                        value="<%= add_on.id %>"
                        data-line-total-target="checkbox"
                        data-price="<%= add_on.price %>"

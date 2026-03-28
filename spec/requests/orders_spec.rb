@@ -61,7 +61,12 @@ RSpec.describe "Orders", type: :request do
 
   describe "GET /orders/:id" do
     it "shows the confirmation page for a submitted order" do
-      post cart_items_path, params: { order_item: { drink_id: drink.id, quantity: 2, add_on_ids: [ add_on.id ] } }
+      post cart_items_path, params: {
+        order_item: {
+          drink_id: drink.id, quantity: 2,
+          order_item_add_ons_attributes: [ { add_on_id: add_on.id } ]
+        }
+      }
       order = Order.last
 
       post orders_path, params: { order: { customer_name: "Jordan" } }
@@ -75,10 +80,11 @@ RSpec.describe "Orders", type: :request do
       expect(response.body).to include("$9.00")
     end
 
-    it "returns 404 for a cart order (not yet submitted)" do
+    it "redirects with an alert for a cart order (not yet submitted)" do
       order = create(:order, status: :cart)
       get order_path(order)
-      expect(response).to have_http_status(:not_found)
+      expect(response).to redirect_to(root_path)
+      expect(flash[:alert]).to eq("The page you were looking for could not be found.")
     end
   end
 end

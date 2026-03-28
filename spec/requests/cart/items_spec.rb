@@ -17,7 +17,10 @@ RSpec.describe "Cart::Items", type: :request do
 
     it "adds a drink with add-ons" do
       post cart_items_path, params: {
-        order_item: { drink_id: drink.id, quantity: 1, add_on_ids: [ add_on.id ] }
+        order_item: {
+          drink_id: drink.id, quantity: 1,
+          order_item_add_ons_attributes: [ { add_on_id: add_on.id } ]
+        }
       }
 
       item = OrderItem.last
@@ -26,7 +29,13 @@ RSpec.describe "Cart::Items", type: :request do
 
     it "deduplicates add-on IDs so the same add-on is only applied once" do
       post cart_items_path, params: {
-        order_item: { drink_id: drink.id, quantity: 1, add_on_ids: [ add_on.id, add_on.id ] }
+        order_item: {
+          drink_id: drink.id, quantity: 1,
+          order_item_add_ons_attributes: [
+            { add_on_id: add_on.id },
+            { add_on_id: add_on.id }
+          ]
+        }
       }
 
       item = OrderItem.last
@@ -77,7 +86,10 @@ RSpec.describe "Cart::Items", type: :request do
   describe "running total" do
     it "reflects the correct total with add-ons and quantity" do
       post cart_items_path, params: {
-        order_item: { drink_id: drink.id, quantity: 2, add_on_ids: [ add_on.id ] }
+        order_item: {
+          drink_id: drink.id, quantity: 2,
+          order_item_add_ons_attributes: [ { add_on_id: add_on.id } ]
+        }
       }
 
       get cart_path
