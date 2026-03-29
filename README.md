@@ -127,6 +127,11 @@ Deployed on [Render](https://render.com/) using the included `render.yaml` Bluep
 
 > **Note:** The Render free tier spins down after inactivity. The first request may take 30–60 seconds to respond.
 
+Admin Credentials:
+
+- **Email:** `admin@bloomcoffee.com`
+- **Password:** `INeedCaffeine!123`
+
 ### Tech stack
 
 - **Ruby on Rails** 8.x (single app at the repository root)
