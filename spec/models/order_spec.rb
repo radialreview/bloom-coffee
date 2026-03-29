@@ -34,6 +34,18 @@ RSpec.describe Order, type: :model do
       expect(order.total).to eq(13.00)
     end
 
+    it "counts a drink base price once with multiple add-ons" do
+      order = create(:order)
+      drink = create(:drink, name: "Latte", base_price: 4.00)
+      add_on_a = create(:add_on, name: "Oat Milk", price: 0.50)
+      add_on_b = create(:add_on, name: "Extra Shot", price: 0.75)
+      item = create(:order_item, order: order, drink: drink, quantity: 1)
+      create(:order_item_add_on, order_item: item, add_on: add_on_a)
+      create(:order_item_add_on, order_item: item, add_on: add_on_b)
+
+      expect(order.total).to eq(5.25)
+    end
+
     it "returns zero for an empty order" do
       expect(create(:order).total).to eq(0)
     end
