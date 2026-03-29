@@ -20,7 +20,7 @@ class OrdersController < ApplicationController
   end
 
   def show
-    @order = Order.submitted.find(params[:id])
+    @order = Order.submitted.find_by!(confirmation_token: params[:id])
     @order_items = @order.order_items.includes(:drink, :add_ons)
   end
 

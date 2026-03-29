@@ -59,7 +59,7 @@ RSpec.describe "Orders", type: :request do
     end
   end
 
-  describe "GET /orders/:id" do
+  describe "GET /orders/:token" do
     it "shows the confirmation page for a submitted order" do
       post cart_items_path, params: {
         order_item: {
@@ -70,6 +70,7 @@ RSpec.describe "Orders", type: :request do
       order = Order.last
 
       post orders_path, params: { order: { customer_name: "Jordan" } }
+      order.reload
 
       get order_path(order)
       expect(response).to have_http_status(:ok)
@@ -80,9 +81,27 @@ RSpec.describe "Orders", type: :request do
       expect(response.body).to include("$9.00")
     end
 
-    it "redirects for a cart order (not yet submitted)" do
-      order = create(:order, status: :cart)
-      get order_path(order)
+    it "uses an unguessable token in the URL instead of a sequential ID" do
+      post cart_items_path, params: { order_item: { drink_id: drink.id, quantity: 1 } }
+      post orders_path, params: { order: { customer_name: "Jordan" } }
+      order = Order.last
+
+      expect(order.confirmation_token).to be_present
+      expect(order.to_param).to eq(order.confirmation_token)
+      expect(order.to_param).not_to eq(order.id.to_s)
+    end
+
+    it "returns not found for an unknown token" do
+      get order_path(id: "nonexistent-token")
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "returns not found when accessing by numeric ID directly" do
+      post cart_items_path, params: { order_item: { drink_id: drink.id, quantity: 1 } }
+      post orders_path, params: { order: { customer_name: "Jordan" } }
+      order = Order.last
+
+      get order_path(id: order.id)
       expect(response).to redirect_to(root_path)
     end
   end
