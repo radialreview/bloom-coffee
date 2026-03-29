@@ -37,5 +37,11 @@ RSpec.describe Drink, type: :model do
       subject.base_price = 0
       expect(subject).to be_valid
     end
+
+    it "rejects a base_price that exceeds the database column limit" do
+      subject.base_price = 1_000_000
+      expect(subject).not_to be_valid
+      expect(subject.errors[:base_price]).to include("must be less than 1000000")
+    end
   end
 end

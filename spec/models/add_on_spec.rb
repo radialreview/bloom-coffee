@@ -25,4 +25,10 @@ RSpec.describe AddOn, type: :model do
   it "allows a zero price" do
     expect(build(:add_on, price: 0)).to be_valid
   end
+
+  it "rejects a price that exceeds the database column limit" do
+    add_on = build(:add_on, price: 1_000_000)
+    expect(add_on).not_to be_valid
+    expect(add_on.errors[:price]).to include("must be less than 1000000")
+  end
 end
