@@ -28,7 +28,42 @@ Our engineers use a rubric when reviewing your submission. You can see what we e
 
 ## How to run locally
 
-**Prerequisites:** Ruby (see `.ruby-version`), Bundler, and PostgreSQL running locally.
+#### macOS (from scratch)
+
+**1. Install Homebrew** (if you don't have it):
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+**2. Install rbenv, Ruby, and PostgreSQL:**
+
+```bash
+brew install rbenv ruby-build postgresql@16
+```
+
+Add rbenv to your shell (follow the instructions from `rbenv init`, or add to `~/.zshrc`):
+
+```bash
+echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Install the required Ruby version and Bundler:
+
+```bash
+rbenv install 3.3.7      # matches .ruby-version
+rbenv global 3.3.7
+gem install bundler
+```
+
+**3. Start PostgreSQL:**
+
+```bash
+brew services start postgresql@16
+```
+
+**4. Set up and run the app:**
 
 ```bash
 bundle install
@@ -39,7 +74,43 @@ bin/dev                # Foreman: Rails server + Tailwind file watcher (recommen
 # or: bin/rails server   # run `bin/rails tailwindcss:watch` in another terminal for CSS changes
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) (port may differ if `bin/dev` assigns another).
+#### Linux
+
+**Prerequisites:** Ruby (see `.ruby-version`) via [rbenv](https://github.com/rbenv/rbenv) or [asdf](https://asdf-vm.com/), Bundler, and PostgreSQL running locally. Then run the same setup commands from step 4 above.
+
+#### Docker (any OS, including Windows)
+
+The easiest way to run the project on any platform is with [Docker Desktop](https://www.docker.com/products/docker-desktop/):
+
+```bash
+docker compose up --build
+```
+
+This starts PostgreSQL and the Rails server in containers. On the first run it creates the database, runs migrations, and seeds the admin user. Then open [http://localhost:3000](http://localhost:3000).
+
+To run tests inside the container:
+
+```bash
+docker compose exec web bin/rspec
+```
+
+To stop everything:
+
+```bash
+docker compose down
+```
+
+#### Windows (without Docker)
+
+Alternatively, use [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install) with an Ubuntu distribution. Once inside WSL:
+
+1. Install Ruby via [rbenv](https://github.com/rbenv/rbenv) or [asdf](https://asdf-vm.com/)
+2. Install PostgreSQL: `sudo apt install postgresql libpq-dev` and start the service: `sudo service postgresql start`
+3. Then run the same commands as macOS/Linux above
+
+#### Open the app
+
+Navigate to [http://localhost:3000](http://localhost:3000) (port may differ if `bin/dev` assigns another).
 
 **Admin login:** After `bin/rails db:seed`, sign in at `/admin/login` with:
 
