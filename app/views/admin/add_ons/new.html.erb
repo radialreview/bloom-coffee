@@ -1,0 +1,12 @@
+<% content_for :title, "New Add-On — Bloom Coffee" %>
+
+<div class="mx-auto max-w-xl px-4 py-10 sm:px-6 lg:px-8">
+  <div class="rounded-2xl border border-stone-200/80 bg-white p-8 shadow-xl shadow-stone-200/50 sm:p-10">
+    <p class="text-sm font-medium uppercase tracking-wide text-amber-800">Admin</p>
+    <h1 class="mt-2 font-serif text-2xl font-semibold text-stone-900">New add-on</h1>
+
+    <div class="mt-6">
+      <%= render "form", add_on: @add_on %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<header class="border-b border-stone-200/80 bg-white/80 backdrop-blur-md">
+  <div class="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+    <%= link_to root_path, class: "group flex items-center gap-2" do %>
+      <span class="font-serif text-2xl font-semibold tracking-tight text-amber-950 transition group-hover:text-amber-800">Bloom Coffee</span>
+    <% end %>
+    <nav class="flex items-center gap-2 text-sm font-medium sm:gap-3">
+      <%= link_to "Menu", menu_index_path, class: "rounded-lg px-3 py-2 text-stone-700 transition hover:bg-stone-100 hover:text-stone-900" %>
+
+      <% cart_count = current_order.item_count %>
+      <%= link_to cart_path, class: "relative rounded-lg px-3 py-2 text-stone-700 transition hover:bg-stone-100 hover:text-stone-900" do %>
+        Order
+        <% if cart_count > 0 %>
+          <span class="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-900 px-1 text-xs font-bold text-white">
+            <%= cart_count %>
+          </span>
+        <% end %>
+      <% end %>
+
+      <% if user_signed_in? %>
+        <%= link_to "Admin", admin_root_path, class: "rounded-lg px-3 py-2 text-stone-700 transition hover:bg-stone-100 hover:text-stone-900" %>
+        <%= button_to "Sign out", destroy_user_session_path, method: :delete, form: { class: "inline" }, class: "cursor-pointer rounded-lg border-0 bg-transparent px-3 py-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-800" %>
+      <% else %>
+        <%= link_to "Sign in", new_user_session_path, class: "rounded-lg px-3 py-2 text-stone-500 transition hover:bg-stone-100 hover:text-stone-800" %>
+      <% end %>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,32 @@
+<%= form_with(model: [:admin, drink], class: "space-y-5") do |f| %>
+  <% if drink.errors.any? %>
+    <div class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+      <p class="font-medium"><%= pluralize(drink.errors.count, "error") %> prevented this drink from being saved:</p>
+      <ul class="mt-2 list-inside list-disc space-y-1 text-red-800">
+        <% drink.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, class: "block text-sm font-medium text-stone-700" %>
+    <%= f.text_field :name, autofocus: true, class: "mt-1.5 block w-full rounded-xl border border-stone-300 bg-stone-50/50 px-4 py-3 text-stone-900 shadow-sm transition placeholder:text-stone-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/30" %>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "block text-sm font-medium text-stone-700" %>
+    <%= f.text_area :description, rows: 3, class: "mt-1.5 block w-full rounded-xl border border-stone-300 bg-stone-50/50 px-4 py-3 text-stone-900 shadow-sm transition placeholder:text-stone-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/30" %>
+  </div>
+
+  <div>
+    <%= f.label :base_price, "Base price ($)", class: "block text-sm font-medium text-stone-700" %>
+    <%= f.number_field :base_price, step: 0.01, min: 0, class: "mt-1.5 block w-full rounded-xl border border-stone-300 bg-stone-50/50 px-4 py-3 text-stone-900 shadow-sm transition placeholder:text-stone-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/30" %>
+  </div>
+
+  <div class="flex items-center gap-3 pt-2">
+    <%= f.submit class: "cursor-pointer rounded-xl bg-amber-900 px-6 py-3 text-sm font-semibold text-white shadow-md shadow-amber-900/20 transition hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2" %>
+    <%= link_to "Cancel", admin_drinks_path, class: "rounded-xl border border-stone-300 bg-white px-5 py-2.5 text-sm font-semibold text-stone-700 transition hover:border-stone-400 hover:bg-stone-50" %>
+  </div>
+<% end %>

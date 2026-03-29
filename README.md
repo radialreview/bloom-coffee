@@ -26,31 +26,162 @@ Our engineers use a rubric when reviewing your submission. You can see what we e
 
 ---
 
-## How to run (your app)
+## How to run locally
 
-In your fork, replace this section with clear instructions for reviewers:
+#### macOS (from scratch)
 
-- **Run locally:** How to install dependencies, set any required env vars, and start the app (e.g. `npm start`, `docker-compose up`).
-- **Deploy:** How you deployed it and the URL (or add the live URL in your PR description).
-- **Admin login:** Because sign-up is not required, provide either (a) the credentials to log into the admin section (e.g. username/password for a seed or default admin), or (b) exact steps to create an admin user so we can sign in and test the admin stories. Don't leave this out — we need to access the admin area to review your work.
+**1. Install Homebrew** (if you don't have it):
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+**2. Install rbenv, Ruby, and PostgreSQL:**
+
+```bash
+brew install rbenv ruby-build postgresql@16
+```
+
+Add rbenv to your shell (follow the instructions from `rbenv init`, or add to `~/.zshrc`):
+
+```bash
+echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Install the required Ruby version and Bundler:
+
+```bash
+rbenv install 3.3.7      # matches .ruby-version
+rbenv global 3.3.7
+gem install bundler
+```
+
+**3. Start PostgreSQL:**
+
+```bash
+brew services start postgresql@16
+```
+
+**4. Set up and run the app:**
+
+```bash
+bundle install
+bin/rails db:prepare   # creates DBs and runs migrations
+bin/rails db:seed      # creates the default admin user (see below)
+bin/rspec              # run the test suite
+bin/dev                # Foreman: Rails server + Tailwind file watcher (recommended in development)
+# or: bin/rails server   # run `bin/rails tailwindcss:watch` in another terminal for CSS changes
+```
+
+#### Linux
+
+**Prerequisites:** Ruby (see `.ruby-version`) via [rbenv](https://github.com/rbenv/rbenv) or [asdf](https://asdf-vm.com/), Bundler, and PostgreSQL running locally. Then run the same setup commands from step 4 above.
+
+#### Docker (any OS, including Windows)
+
+The easiest way to run the project on any platform is with [Docker Desktop](https://www.docker.com/products/docker-desktop/):
+
+```bash
+docker compose up --build
+```
+
+This starts PostgreSQL and the Rails server in containers. On the first run it creates the database, runs migrations, and seeds the admin user. Then open [http://localhost:3000](http://localhost:3000).
+
+To run tests inside the container:
+
+```bash
+docker compose exec web bin/rspec
+```
+
+To stop everything:
+
+```bash
+docker compose down
+```
+
+#### Windows (without Docker)
+
+Alternatively, use [WSL 2](https://learn.microsoft.com/en-us/windows/wsl/install) with an Ubuntu distribution. Once inside WSL:
+
+1. Install Ruby via [rbenv](https://github.com/rbenv/rbenv) or [asdf](https://asdf-vm.com/)
+2. Install PostgreSQL: `sudo apt install postgresql libpq-dev` and start the service: `sudo service postgresql start`
+3. Then run the same commands as macOS/Linux above
+
+#### Open the app
+
+Navigate to [http://localhost:3000](http://localhost:3000) (port may differ if `bin/dev` assigns another).
+
+**Admin login:** After `bin/rails db:seed`, sign in at `/admin/login` with:
+
+- **Email:** `admin@bloomcoffee.com`
+- **Password:** `INeedCaffeine!123`
+
+Override with `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` environment variables when seeding if you prefer different credentials.
+
+### Deploy
+
+Deployed on [Render](https://render.com/) using the included `render.yaml` Blueprint (web service + PostgreSQL).
+
+**Live URL:** [https://bloom-coffee.onrender.com/](https://bloom-coffee.onrender.com/)
+
+> **Note:** The Render free tier spins down after inactivity. The first request may take 30–60 seconds to respond.
+
+Admin Credentials:
+
+- **Email:** `admin@bloomcoffee.com`
+- **Password:** `INeedCaffeine!123`
+
+### Tech stack
+
+- **Ruby on Rails** 8.x (single app at the repository root)
+- **PostgreSQL** (development, test, production)
+- **Hotwire:** [Turbo Rails](https://turbo.hotwired.dev/) + [Stimulus](https://stimulus.hotwired.dev/) via [importmap-rails](https://github.com/rails/importmap-rails)
+- **CSS:** [Tailwind CSS](https://tailwindcss.com/) v4 via [tailwindcss-rails](https://github.com/rails/tailwindcss-rails)
+- **Authentication:** [Devise](https://github.com/heartcombo/devise) (database authenticatable, rememberable)
+- **Authorization:** [Pundit](https://github.com/varvet/pundit) (role-based admin gate via `UserPolicy`)
+- **Tests:** [RSpec](https://github.com/rspec/rspec-rails) + [Factory Bot](https://github.com/thoughtbot/factory_bot_rails) + [Capybara](https://github.com/teamcapybara/capybara) (request, model, policy, and system specs)
+
+### Environment variables
+
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | Production | PostgreSQL connection string (set by Render) |
+| `RAILS_MASTER_KEY` | Production | Decrypts `credentials.yml.enc` |
+| `SEED_ADMIN_EMAIL` | No | Override default admin email (default: `admin@bloomcoffee.com`) |
+| `SEED_ADMIN_PASSWORD` | No | Override default admin password (default: `INeedCaffeine!123`) |
+| `MAILER_HOST` | Production | Host for mailer-generated URLs |
 
 ---
 
-## Repo structure (suggestion)
-
-You don't have to follow this exactly; we only need to find the code and run it.
+## Repo structure
 
 ```
 /
-├── README.md              # This file (update with your run/deploy instructions)
-├── STORIES.md             # Copy of the stories (for your reference; implementation is what we review)
-├── docs/                  # Optional: any extra notes or decisions
-├── <your-app>/            # Your choice: e.g. one app, or frontend/ + backend/
-│   └── ...
-└── ...
+├── app/
+│   ├── controllers/
+│   │   ├── admin/           # Admin namespace (BaseController gate, Drinks, AddOns)
+│   │   ├── cart/            # Cart::ItemsController (add/update/remove items)
+│   │   ├── concerns/        # CartConcern (session-backed current_order)
+│   │   ├── cart_controller  # Cart show (order summary)
+│   │   ├── menu_controller  # Public menu (index + customize drink)
+│   │   ├── orders_controller# Submit order + confirmation page
+│   │   └── home_controller  # Landing page
+│   ├── models/              # User, Drink, AddOn, Order, OrderItem, OrderItemAddOn
+│   ├── policies/            # UserPolicy (admin access gate), ApplicationPolicy
+│   ├── views/               # ERB templates with Tailwind CSS
+│   └── javascript/          # Stimulus controllers (line-total preview)
+├── config/
+│   └── routes.rb            # RESTful routes: menu, cart, orders, admin namespace
+├── db/
+│   ├── migrate/             # All migrations
+│   ├── schema.rb            # Current schema
+│   └── seeds.rb             # Admin user bootstrap
+├── spec/                    # RSpec: models, requests, policies, system
+├── render.yaml              # Render Blueprint (IaC)
+├── STORIES.md               # Stories & acceptance criteria
+└── RUBRIC.md                # Evaluation rubric
 ```
-
-Use one repo; monorepo or single app is fine. Keep it simple enough that we can clone, install, and run without guessing.
 
 ---
 
