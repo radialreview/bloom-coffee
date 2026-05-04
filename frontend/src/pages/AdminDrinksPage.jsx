@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { apiClient } from '../api/client'
 import { useAuth } from '../context/useAuth'
@@ -109,9 +110,14 @@ function AdminDrinksPage() {
             <h1>Manage Drinks</h1>
             <p className="subtle-text">Create, edit, and remove drinks from the menu.</p>
           </div>
-          <button type="button" onClick={handleLogout}>
-            Log out
-          </button>
+          <div className="row-actions">
+            <Link className="secondary-button inline-link-button" to="/admin/add-ons">
+              Manage add-ons
+            </Link>
+            <button type="button" onClick={handleLogout}>
+              Log out
+            </button>
+          </div>
         </header>
 
         <form onSubmit={handleSubmit} className="drink-form">

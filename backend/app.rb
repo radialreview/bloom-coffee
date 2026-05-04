@@ -16,6 +16,10 @@ class BloomCoffeeAPI < Sinatra::Base
       { id: 1, name: "Drip Coffee", description: "House roast brewed fresh.", base_price: 3.25 },
       { id: 2, name: "Latte", description: "Espresso with steamed milk.", base_price: 4.75 },
     ]
+    set :add_ons, [
+      { id: 1, name: "Oat Milk", price: 0.5 },
+      { id: 2, name: "Extra Shot", price: 0.75 },
+    ]
   end
 
   use Rack::Cors do
@@ -101,6 +105,48 @@ class BloomCoffeeAPI < Sinatra::Base
     status 204
   end
 
+  get "/api/v1/add_ons" do
+    json(add_ons: settings.add_ons)
+  end
+
+  post "/api/v1/add_ons" do
+    require_authentication!
+    payload = JSON.parse(request.body.read)
+    attributes = sanitize_add_on_attributes(payload)
+    errors = validate_add_on(attributes)
+    halt 422, json(error: errors.join(", ")) unless errors.empty?
+
+    next_id = settings.add_ons.map { |item| item[:id] }.max.to_i + 1
+    add_on = attributes.merge(id: next_id)
+    settings.add_ons << add_on
+    status 201
+    json(add_on:)
+  rescue JSON::ParserError
+    halt 400, json(error: "Invalid JSON body.")
+  end
+
+  patch "/api/v1/add_ons/:id" do
+    require_authentication!
+    payload = JSON.parse(request.body.read)
+    attributes = sanitize_add_on_attributes(payload)
+    errors = validate_add_on(attributes)
+    halt 422, json(error: errors.join(", ")) unless errors.empty?
+
+    add_on = find_add_on!(params[:id])
+    add_on[:name] = attributes[:name]
+    add_on[:price] = attributes[:price]
+    json(add_on:)
+  rescue JSON::ParserError
+    halt 400, json(error: "Invalid JSON body.")
+  end
+
+  delete "/api/v1/add_ons/:id" do
+    require_authentication!
+    add_on = find_add_on!(params[:id])
+    settings.add_ons.delete(add_on)
+    status 204
+  end
+
   not_found do
     json(error: "Not found")
   end
@@ -153,6 +199,34 @@ class BloomCoffeeAPI < Sinatra::Base
       halt 404, json(error: "Drink not found.") unless drink
 
       drink
+    end
+
+    def sanitize_add_on_attributes(payload)
+      price = payload["price"]
+      parsed_price = begin
+        Float(price)
+      rescue ArgumentError, TypeError
+        nil
+      end
+
+      {
+        name: payload["name"].to_s.strip,
+        price: parsed_price&.round(2),
+      }
+    end
+
+    def validate_add_on(attributes)
+      errors = []
+      errors << "Name is required." if attributes[:name].empty?
+      errors << "Price must be greater than or equal to 0." if attributes[:price].nil? || attributes[:price] < 0
+      errors
+    end
+
+    def find_add_on!(id)
+      add_on = settings.add_ons.find { |item| item[:id] == id.to_i }
+      halt 404, json(error: "Add-on not found.") unless add_on
+
+      add_on
     end
   end
 end

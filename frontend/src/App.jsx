@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { useAuth } from './context/useAuth'
+import AdminAddOnsPage from './pages/AdminAddOnsPage'
 import AdminDrinksPage from './pages/AdminDrinksPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -24,6 +25,14 @@ function App() {
         element={
           <ProtectedRoute>
             <AdminDrinksPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/add-ons"
+        element={
+          <ProtectedRoute>
+            <AdminAddOnsPage />
           </ProtectedRoute>
         }
       />

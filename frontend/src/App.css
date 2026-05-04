@@ -127,6 +127,12 @@
   border: 1px solid #cfd4dc;
 }
 
+.inline-link-button {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 .danger-button {
   background: #b42318;
 }
