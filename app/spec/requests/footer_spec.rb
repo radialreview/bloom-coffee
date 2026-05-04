@@ -18,6 +18,6 @@ RSpec.describe "Footer primary nav", type: :request do
 
     get admin_root_path
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("Admin area")
+    expect(response.body).to include("Manage menu")
   end
 end

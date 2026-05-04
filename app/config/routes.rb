@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     delete "logout", to: "sessions#destroy", as: :logout
 
     root "dashboard#show"
+
+    resources :drinks, except: %i[show]
   end
 end

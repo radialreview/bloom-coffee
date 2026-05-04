@@ -1,0 +1,53 @@
+<%= turbo_frame_tag frame_id do %>
+  <%= form_with model: drink,
+        url: (drink.persisted? ? admin_drink_path(drink) : admin_drinks_path),
+        local: true,
+        class: "flex flex-col gap-3 px-3 py-3 mb-4 bg-white border border-stone-200 rounded-lg" do |f| %>
+    <% if drink.errors.any? %>
+      <div class="px-3 py-2.5 rounded-lg border border-red-200 bg-red-50 text-red-800 text-sm" role="alert">
+        <ul class="list-disc m-0 pl-5">
+          <% drink.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="flex flex-col gap-1.5">
+      <%= f.label :name, class: "text-[0.8125rem] font-semibold" %>
+      <%= f.text_field :name,
+            required: true,
+            autocomplete: "off",
+            class: "w-full px-3 py-2.5 rounded-lg border border-stone-200 bg-stone-50
+                    focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-amber-700" %>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <%= f.label :description, class: "text-[0.8125rem] font-semibold" %>
+      <%= f.text_area :description,
+            rows: 2,
+            class: "w-full px-3 py-2.5 rounded-lg border border-stone-200 bg-stone-50
+                    focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-amber-700" %>
+    </div>
+
+    <div class="flex flex-col gap-1.5">
+      <%= f.label :price, class: "text-[0.8125rem] font-semibold" %>
+      <%= f.number_field :price,
+            step: "0.01",
+            min: "0",
+            required: true,
+            inputmode: "decimal",
+            class: "w-full px-3 py-2.5 rounded-lg border border-stone-200 bg-stone-50
+                    focus:outline focus:outline-2 focus:outline-offset-1 focus:outline-amber-700" %>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= f.submit (drink.persisted? ? "Save" : "Create"),
+            class: "px-4 py-2.5 rounded-lg bg-amber-800 text-white font-semibold
+                    hover:brightness-95 cursor-pointer" %>
+      <%= link_to "Cancel", admin_drinks_path,
+            data: { turbo_frame: frame_id },
+            class: "text-sm font-semibold text-stone-700 hover:text-amber-800" %>
+    </div>
+  <% end %>
+<% end %>

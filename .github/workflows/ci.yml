@@ -16,7 +16,6 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: app/.ruby-version
           bundler-cache: true
           working-directory: app
 
@@ -34,7 +33,6 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: app/.ruby-version
           bundler-cache: true
           working-directory: app
 
@@ -51,7 +49,6 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: app/.ruby-version
           bundler-cache: true
           working-directory: app
 
@@ -88,7 +85,6 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: app/.ruby-version
           bundler-cache: true
           working-directory: app
 
@@ -101,10 +97,10 @@ jobs:
           PGUSER: postgres
           PGPASSWORD: postgres
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare tailwindcss:build && bin/rspec
+        run: bin/rails db:test:prepare tailwindcss:build && bundle exec rspec
 
       - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: screenshots

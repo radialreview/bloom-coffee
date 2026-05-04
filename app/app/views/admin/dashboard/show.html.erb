@@ -1,2 +1,17 @@
 <% content_for :title, "Admin" %>
-<p>Admin area</p>
+
+<section class="w-full max-w-md text-left mt-[clamp(1rem,6vh,3rem)]">
+  <h1 class="m-0 mb-2 text-2xl font-bold">Manage menu</h1>
+  <p class="m-0 mb-5 text-stone-600">Manage what shows up on the menu.</p>
+
+  <ul class="list-none p-0 m-0 flex flex-col gap-2">
+    <li class="flex items-center justify-between gap-3 rounded-lg border border-stone-300 bg-white px-3 py-3 shadow-sm">
+      <span class="flex flex-col">
+        <span class="font-semibold text-stone-900">Drinks</span>
+        <small class="text-stone-500">Names, descriptions, prices.</small>
+      </span>
+      <%= link_to "Manage", admin_drinks_path,
+            class: "shrink-0 text-sm font-semibold text-amber-800 hover:underline" %>
+    </li>
+  </ul>
+</section>

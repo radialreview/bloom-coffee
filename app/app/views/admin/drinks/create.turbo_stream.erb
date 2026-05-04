@@ -1,0 +1,4 @@
+<%= turbo_stream.append "drinks", partial: "admin/drinks/drink", locals: { drink: @drink } %>
+<%= turbo_stream.remove "drinks_empty" %>
+<%= turbo_stream.replace "new_drink", partial: "admin/drinks/new_drink_frame" %>
+<%= turbo_stream.replace "flash",     partial: "shared/flash" %>
