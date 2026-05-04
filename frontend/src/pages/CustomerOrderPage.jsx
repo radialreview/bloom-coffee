@@ -4,6 +4,8 @@ import { apiClient } from '../api/client'
 import { useOrder } from '../context/useOrder'
 import { formatMoney } from '../utils/format'
 
+const MAX_CUSTOMER_NAME_LENGTH = 120
+
 function CustomerOrderPage() {
   const navigate = useNavigate()
   const { items, itemCount, total, removeItem, updateQuantity, clearOrder } = useOrder()
@@ -12,12 +14,22 @@ function CustomerOrderPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   async function handleSubmitOrder() {
+    const trimmedCustomerName = customerName.trim()
+    if (!trimmedCustomerName) {
+      setSubmitError('Customer name is required.')
+      return
+    }
+    if (trimmedCustomerName.length > MAX_CUSTOMER_NAME_LENGTH) {
+      setSubmitError(`Customer name cannot exceed ${MAX_CUSTOMER_NAME_LENGTH} characters.`)
+      return
+    }
+
     setSubmitError('')
     setIsSubmitting(true)
 
     try {
       const payload = {
-        customer_name: customerName.trim(),
+        customer_name: trimmedCustomerName,
         items: items.map((item) => ({
           drink_id: item.drink.id,
           quantity: item.quantity,
@@ -105,6 +117,7 @@ function CustomerOrderPage() {
             value={customerName}
             onChange={(event) => setCustomerName(event.target.value)}
             placeholder="What should we call out?"
+            maxLength={MAX_CUSTOMER_NAME_LENGTH}
             required
           />
           {submitError ? <p className="error-text">{submitError}</p> : null}

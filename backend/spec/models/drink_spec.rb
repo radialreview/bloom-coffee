@@ -21,4 +21,14 @@ RSpec.describe Drink, type: :model do
     duplicate = build(:drink, name: "Latte")
     expect(duplicate).not_to be_valid
   end
+
+  it "is invalid when name is too long" do
+    drink = build(:drink, name: "A" * 121)
+    expect(drink).not_to be_valid
+  end
+
+  it "is invalid when base price is too large" do
+    drink = build(:drink, base_price: 1_000_000.00)
+    expect(drink).not_to be_valid
+  end
 end

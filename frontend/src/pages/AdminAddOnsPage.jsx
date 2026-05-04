@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { useAdminCrud } from '../hooks/useAdminCrud'
 
 const EMPTY_FORM = { name: '', price: '' }
+const MAX_NAME_LENGTH = 120
+const MAX_PRICE = 999999.99
 
 function toFormData(addOn) {
   return {
@@ -11,7 +13,23 @@ function toFormData(addOn) {
 }
 
 function buildPayload(formData) {
-  return { ...formData, price: Number(formData.price) }
+  return {
+    name: formData.name.trim(),
+    price: Number(formData.price),
+  }
+}
+
+function validateAddOnForm(formData) {
+  const name = formData.name.trim()
+  const price = Number(formData.price)
+
+  if (!name) return 'Name is required.'
+  if (name.length > MAX_NAME_LENGTH) return `Name cannot exceed ${MAX_NAME_LENGTH} characters.`
+  if (!Number.isFinite(price)) return 'Price must be a valid number.'
+  if (price < 0) return 'Price cannot be negative.'
+  if (price > MAX_PRICE) return `Price cannot exceed ${MAX_PRICE}.`
+
+  return ''
 }
 
 function AdminAddOnsPage() {
@@ -33,6 +51,7 @@ function AdminAddOnsPage() {
     dataKey: 'add_ons',
     emptyForm: EMPTY_FORM,
     buildPayload,
+    validateForm: validateAddOnForm,
   })
 
   return (
@@ -61,6 +80,7 @@ function AdminAddOnsPage() {
             id="add-on-name"
             value={formData.name}
             onChange={(event) => updateField('name', event.target.value)}
+            maxLength={MAX_NAME_LENGTH}
             required
           />
 
@@ -70,6 +90,7 @@ function AdminAddOnsPage() {
             type="number"
             step="0.01"
             min="0"
+            max={MAX_PRICE}
             value={formData.price}
             onChange={(event) => updateField('price', event.target.value)}
             required

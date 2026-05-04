@@ -21,4 +21,14 @@ RSpec.describe AddOn, type: :model do
     duplicate = build(:add_on, name: "Oat Milk")
     expect(duplicate).not_to be_valid
   end
+
+  it "is invalid when name is too long" do
+    add_on = build(:add_on, name: "A" * 121)
+    expect(add_on).not_to be_valid
+  end
+
+  it "is invalid when price is too large" do
+    add_on = build(:add_on, price: 1_000_000.00)
+    expect(add_on).not_to be_valid
+  end
 end

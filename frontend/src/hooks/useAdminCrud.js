@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { apiClient } from '../api/client'
 import { useAuth } from '../context/useAuth'
 
-export function useAdminCrud({ endpoint, dataKey, emptyForm, buildPayload }) {
+export function useAdminCrud({ endpoint, dataKey, emptyForm, buildPayload, validateForm }) {
   const navigate = useNavigate()
   const { logout } = useAuth()
 
@@ -52,9 +52,15 @@ export function useAdminCrud({ endpoint, dataKey, emptyForm, buildPayload }) {
 
   async function handleSubmit(event) {
     event.preventDefault()
-    setIsSaving(true)
     setError('')
 
+    const validationError = validateForm ? validateForm(formData) : ''
+    if (validationError) {
+      setError(validationError)
+      return
+    }
+
+    setIsSaving(true)
     const payload = buildPayload(formData)
 
     try {

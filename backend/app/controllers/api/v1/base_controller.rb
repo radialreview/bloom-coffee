@@ -34,8 +34,21 @@ module Api
         halt 400, json(error: "Invalid JSON body.")
       end
 
+      error ActiveModel::RangeError do
+        halt 422, json(error: "Input value is out of allowed range.")
+      end
+
       error ActiveRecord::DeleteRestrictionError do
         halt 409, json(error: "Cannot delete: record is referenced by existing orders.")
+      end
+
+      error ActiveRecord::StatementInvalid do
+        message = env["sinatra.error"].message
+        if message.match?(/(out of range|numeric field overflow|invalid input syntax for type numeric|value too long)/i)
+          halt 422, json(error: "Input value is out of allowed range.")
+        end
+
+        halt 500, json(error: "Unexpected server error")
       end
 
       error do

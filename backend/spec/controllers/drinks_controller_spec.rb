@@ -25,6 +25,15 @@ RSpec.describe "Drinks API", type: :request do
     expect(Drink.find_by(name: "Mocha")).not_to be_nil
   end
 
+  it "returns 422 for an out-of-range base price" do
+    token = login_token
+
+    post "/api/v1/drinks", { name: "Gold Mocha", description: "Fancy", base_price: 1_000_000.00 }.to_json, json_headers(token: token)
+
+    expect(last_response.status).to eq(422)
+    expect(parsed_json["error"]).to match(/Base price/i)
+  end
+
   it "updates a drink with auth token" do
     token = login_token
     drink = create(:drink, name: "Latte", base_price: 4.75)

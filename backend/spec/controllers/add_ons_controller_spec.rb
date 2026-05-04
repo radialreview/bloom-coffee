@@ -25,6 +25,15 @@ RSpec.describe "Add-ons API", type: :request do
     expect(AddOn.find_by(name: "Vanilla")).not_to be_nil
   end
 
+  it "returns 422 for an out-of-range add-on price" do
+    token = login_token
+
+    post "/api/v1/add_ons", { name: "Diamond Dust", price: 1_000_000.00 }.to_json, json_headers(token: token)
+
+    expect(last_response.status).to eq(422)
+    expect(parsed_json["error"]).to match(/Price/i)
+  end
+
   it "blocks update without auth token" do
     add_on = create(:add_on, name: "Vanilla", price: 0.5)
 

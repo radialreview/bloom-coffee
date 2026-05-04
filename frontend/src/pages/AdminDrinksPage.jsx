@@ -2,6 +2,9 @@ import { Link } from 'react-router-dom'
 import { useAdminCrud } from '../hooks/useAdminCrud'
 
 const EMPTY_FORM = { name: '', description: '', base_price: '' }
+const MAX_NAME_LENGTH = 120
+const MAX_DESCRIPTION_LENGTH = 500
+const MAX_BASE_PRICE = 999999.99
 
 function toFormData(drink) {
   return {
@@ -12,7 +15,26 @@ function toFormData(drink) {
 }
 
 function buildPayload(formData) {
-  return { ...formData, base_price: Number(formData.base_price) }
+  return {
+    name: formData.name.trim(),
+    description: formData.description.trim(),
+    base_price: Number(formData.base_price),
+  }
+}
+
+function validateDrinkForm(formData) {
+  const name = formData.name.trim()
+  const description = formData.description.trim()
+  const basePrice = Number(formData.base_price)
+
+  if (!name) return 'Name is required.'
+  if (name.length > MAX_NAME_LENGTH) return `Name cannot exceed ${MAX_NAME_LENGTH} characters.`
+  if (description.length > MAX_DESCRIPTION_LENGTH) return `Description cannot exceed ${MAX_DESCRIPTION_LENGTH} characters.`
+  if (!Number.isFinite(basePrice)) return 'Base price must be a valid number.'
+  if (basePrice <= 0) return 'Base price must be greater than 0.'
+  if (basePrice > MAX_BASE_PRICE) return `Base price cannot exceed ${MAX_BASE_PRICE}.`
+
+  return ''
 }
 
 function AdminDrinksPage() {
@@ -34,6 +56,7 @@ function AdminDrinksPage() {
     dataKey: 'drinks',
     emptyForm: EMPTY_FORM,
     buildPayload,
+    validateForm: validateDrinkForm,
   })
 
   return (
@@ -62,6 +85,7 @@ function AdminDrinksPage() {
             id="drink-name"
             value={formData.name}
             onChange={(event) => updateField('name', event.target.value)}
+            maxLength={MAX_NAME_LENGTH}
             required
           />
 
@@ -71,6 +95,7 @@ function AdminDrinksPage() {
             rows="3"
             value={formData.description}
             onChange={(event) => updateField('description', event.target.value)}
+            maxLength={MAX_DESCRIPTION_LENGTH}
           />
 
           <label htmlFor="drink-price">Base price</label>
@@ -79,6 +104,7 @@ function AdminDrinksPage() {
             type="number"
             step="0.01"
             min="0.01"
+            max={MAX_BASE_PRICE}
             value={formData.base_price}
             onChange={(event) => updateField('base_price', event.target.value)}
             required
