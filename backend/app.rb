@@ -12,12 +12,16 @@ class BloomCoffeeAPI < Sinatra::Base
     set :jwt_secret, ENV.fetch("JWT_SECRET", "dev-secret-change-me")
     set :admin_email, ENV.fetch("ADMIN_EMAIL", "admin@bloom.coffee")
     set :admin_password_hash, BCrypt::Password.create(ENV.fetch("ADMIN_PASSWORD", "password123"))
+    set :drinks, [
+      { id: 1, name: "Drip Coffee", description: "House roast brewed fresh.", base_price: 3.25 },
+      { id: 2, name: "Latte", description: "Espresso with steamed milk.", base_price: 4.75 },
+    ]
   end
 
   use Rack::Cors do
     allow do
       origins ENV.fetch("FRONTEND_ORIGIN", "http://localhost:5173")
-      resource "*", headers: :any, methods: %i[get post options], expose: ["Authorization"]
+      resource "*", headers: :any, methods: %i[get post patch delete options], expose: ["Authorization"]
     end
   end
 
@@ -54,6 +58,49 @@ class BloomCoffeeAPI < Sinatra::Base
     json(message: "Logged out.")
   end
 
+  get "/api/v1/drinks" do
+    json(drinks: settings.drinks)
+  end
+
+  post "/api/v1/drinks" do
+    require_authentication!
+    payload = JSON.parse(request.body.read)
+    attributes = sanitize_drink_attributes(payload)
+    errors = validate_drink(attributes)
+    halt 422, json(error: errors.join(", ")) unless errors.empty?
+
+    next_id = settings.drinks.map { |item| item[:id] }.max.to_i + 1
+    drink = attributes.merge(id: next_id)
+    settings.drinks << drink
+    status 201
+    json(drink:)
+  rescue JSON::ParserError
+    halt 400, json(error: "Invalid JSON body.")
+  end
+
+  patch "/api/v1/drinks/:id" do
+    require_authentication!
+    payload = JSON.parse(request.body.read)
+    attributes = sanitize_drink_attributes(payload)
+    errors = validate_drink(attributes)
+    halt 422, json(error: errors.join(", ")) unless errors.empty?
+
+    drink = find_drink!(params[:id])
+    drink[:name] = attributes[:name]
+    drink[:description] = attributes[:description]
+    drink[:base_price] = attributes[:base_price]
+    json(drink:)
+  rescue JSON::ParserError
+    halt 400, json(error: "Invalid JSON body.")
+  end
+
+  delete "/api/v1/drinks/:id" do
+    require_authentication!
+    drink = find_drink!(params[:id])
+    settings.drinks.delete(drink)
+    status 204
+  end
+
   not_found do
     json(error: "Not found")
   end
@@ -77,6 +124,35 @@ class BloomCoffeeAPI < Sinatra::Base
       { email: decoded_token.dig(0, "sub") }
     rescue JWT::DecodeError, JWT::ExpiredSignature
       halt 401, json(error: "Unauthorized")
+    end
+
+    def sanitize_drink_attributes(payload)
+      base_price = payload["base_price"]
+      parsed_base_price = begin
+        Float(base_price)
+      rescue ArgumentError, TypeError
+        nil
+      end
+
+      {
+        name: payload["name"].to_s.strip,
+        description: payload["description"].to_s.strip,
+        base_price: parsed_base_price&.round(2),
+      }
+    end
+
+    def validate_drink(attributes)
+      errors = []
+      errors << "Name is required." if attributes[:name].empty?
+      errors << "Base price must be greater than 0." if attributes[:base_price].nil? || attributes[:base_price] <= 0
+      errors
+    end
+
+    def find_drink!(id)
+      drink = settings.drinks.find { |item| item[:id] == id.to_i }
+      halt 404, json(error: "Drink not found.") unless drink
+
+      drink
     end
   end
 end

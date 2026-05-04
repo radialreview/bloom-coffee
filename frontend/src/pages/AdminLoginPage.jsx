@@ -17,7 +17,7 @@ function AdminLoginPage() {
 
     try {
       await login(email, password)
-      navigate('/admin/dashboard')
+      navigate('/admin/drinks')
     } catch (apiError) {
       const message = apiError?.response?.data?.error || 'Login failed. Please try again.'
       setError(message)

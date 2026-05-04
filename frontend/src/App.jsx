@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import './App.css'
 import { useAuth } from './context/useAuth'
-import AdminDashboardPage from './pages/AdminDashboardPage'
+import AdminDrinksPage from './pages/AdminDrinksPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function AdminLandingRedirect() {
   const { isAuthenticated } = useAuth()
-  return <Navigate to={isAuthenticated ? '/admin/dashboard' : '/admin/login'} replace />
+  return <Navigate to={isAuthenticated ? '/admin/drinks' : '/admin/login'} replace />
 }
 
 function App() {
@@ -17,9 +17,13 @@ function App() {
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route
         path="/admin/dashboard"
+        element={<Navigate to="/admin/drinks" replace />}
+      />
+      <Route
+        path="/admin/drinks"
         element={
           <ProtectedRoute>
-            <AdminDashboardPage />
+            <AdminDrinksPage />
           </ProtectedRoute>
         }
       />
