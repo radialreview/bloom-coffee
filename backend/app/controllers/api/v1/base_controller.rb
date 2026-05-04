@@ -5,17 +5,8 @@ module Api
         set :show_exceptions, false
         set :raise_errors, false
         set :environment, ENV.fetch("RACK_ENV", "development").to_sym
-
-        database_url = ENV["DATABASE_URL"].to_s.strip
-        if database_url.empty?
-          set :database_file, File.expand_path("../../../../config/database.yml", __dir__)
-        else
-          # In hosted environments (Render, etc.), bind directly to DATABASE_URL.
-          set :database, database_url
-        end
       end
 
-      register Sinatra::ActiveRecordExtension
       helpers Sinatra::JSON
 
       before do
