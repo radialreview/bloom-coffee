@@ -148,9 +148,115 @@
   place-items: center;
 }
 
+.customer-page {
+  min-height: 100vh;
+  padding: 1rem;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.customer-header h1 {
+  margin: 0;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.9rem;
+}
+
+.menu-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.menu-card h2 {
+  margin: 0;
+}
+
+.customizer-card {
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.customizer-card h2 {
+  margin: 0;
+}
+
+.add-ons-grid {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.add-on-option {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.customizer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.order-summary-bar {
+  margin-top: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.85rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  position: sticky;
+  bottom: 0.75rem;
+}
+
+.empty-state-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.quantity-pill {
+  min-width: 2rem;
+  text-align: center;
+  padding: 0.45rem 0.55rem;
+  border: 1px solid #cfd4dc;
+  border-radius: 8px;
+  background: #fff;
+}
+
 @media (max-width: 640px) {
   .admin-header,
-  .drink-row {
+  .drink-row,
+  .customer-header,
+  .order-summary-bar {
     flex-direction: column;
+    align-items: stretch;
   }
 }

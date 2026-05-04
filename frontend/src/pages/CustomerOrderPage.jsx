@@ -1,0 +1,74 @@
+import { Link } from 'react-router-dom'
+import { useOrder } from '../context/useOrder'
+
+function formatMoney(value) {
+  return `$${Number(value).toFixed(2)}`
+}
+
+function CustomerOrderPage() {
+  const { items, itemCount, total, removeItem, updateQuantity } = useOrder()
+
+  return (
+    <main className="customer-page">
+      <header className="customer-header">
+        <div>
+          <h1>Your Order</h1>
+          <p className="subtle-text">Review items, update quantities, and keep your running total accurate.</p>
+        </div>
+        <Link className="secondary-button inline-link-button" to="/menu">
+          Back to menu
+        </Link>
+      </header>
+
+      {items.length === 0 ? (
+        <section className="empty-state-card">
+          <p>Your order is empty.</p>
+          <Link className="inline-link-button" to="/menu">
+            Start adding drinks
+          </Link>
+        </section>
+      ) : (
+        <section className="drinks-list">
+          {items.map((item) => (
+            <article key={item.id} className="drink-row">
+              <div>
+                <h2>{item.drink.name}</h2>
+                <p className="subtle-text">
+                  Base {formatMoney(item.drink.base_price)}
+                  {item.addOns.length > 0
+                    ? ` + ${item.addOns.map((addOn) => `${addOn.name} (${formatMoney(addOn.price)})`).join(', ')}`
+                    : ' (no add-ons)'}
+                </p>
+                <p className="drink-price">Line total: {formatMoney(item.lineTotal)}</p>
+              </div>
+
+              <div className="row-actions">
+                <button type="button" className="secondary-button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                  -
+                </button>
+                <span className="quantity-pill">{item.quantity}</span>
+                <button type="button" className="secondary-button" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                  +
+                </button>
+                <button type="button" className="danger-button" onClick={() => removeItem(item.id)}>
+                  Remove
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
+
+      <footer className="order-summary-bar">
+        <p>
+          {itemCount} item{itemCount === 1 ? '' : 's'} in order
+        </p>
+        <p>
+          Total: <strong>{formatMoney(total)}</strong>
+        </p>
+      </footer>
+    </main>
+  )
+}
+
+export default CustomerOrderPage

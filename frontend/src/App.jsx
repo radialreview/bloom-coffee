@@ -4,6 +4,8 @@ import { useAuth } from './context/useAuth'
 import AdminAddOnsPage from './pages/AdminAddOnsPage'
 import AdminDrinksPage from './pages/AdminDrinksPage'
 import AdminLoginPage from './pages/AdminLoginPage'
+import CustomerMenuPage from './pages/CustomerMenuPage'
+import CustomerOrderPage from './pages/CustomerOrderPage'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function AdminLandingRedirect() {
@@ -14,7 +16,10 @@ function AdminLandingRedirect() {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<AdminLandingRedirect />} />
+      <Route path="/" element={<Navigate to="/menu" replace />} />
+      <Route path="/menu" element={<CustomerMenuPage />} />
+      <Route path="/order" element={<CustomerOrderPage />} />
+      <Route path="/admin" element={<AdminLandingRedirect />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route
         path="/admin/dashboard"
@@ -36,7 +41,7 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/menu" replace />} />
     </Routes>
   )
 }
