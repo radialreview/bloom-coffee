@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Run the Rails app dev server from repo root (app lives in ./app).
+cd "$(dirname "$0")/../app" || exit 1
+exec ./bin/dev "$@"
