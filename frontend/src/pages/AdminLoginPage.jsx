@@ -5,8 +5,8 @@ import { useAuth } from '../context/useAuth'
 function AdminLoginPage() {
   const navigate = useNavigate()
   const { login } = useAuth()
-  const [email, setEmail] = useState('admin@bloom.coffee')
-  const [password, setPassword] = useState('password123')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -39,6 +39,8 @@ function AdminLoginPage() {
             type="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
+            placeholder="admin@bloom.coffee"
             required
           />
 
@@ -48,6 +50,8 @@ function AdminLoginPage() {
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
+            autoComplete="current-password"
+            placeholder="Enter your password"
             required
           />
 
