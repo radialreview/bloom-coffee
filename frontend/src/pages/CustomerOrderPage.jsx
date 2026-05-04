@@ -2,10 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { apiClient } from '../api/client'
 import { useOrder } from '../context/useOrder'
-
-function formatMoney(value) {
-  return `$${Number(value).toFixed(2)}`
-}
+import { formatMoney } from '../utils/format'
 
 function CustomerOrderPage() {
   const navigate = useNavigate()

@@ -1,10 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { apiClient } from '../api/client'
-
-function formatMoney(value) {
-  return `$${Number(value).toFixed(2)}`
-}
+import { formatMoney } from '../utils/format'
 
 function OrderConfirmationPage() {
   const { id } = useParams()

@@ -1,106 +1,40 @@
-import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import { apiClient } from '../api/client'
-import { useAuth } from '../context/useAuth'
+import { useAdminCrud } from '../hooks/useAdminCrud'
 
-const EMPTY_FORM = {
-  name: '',
-  description: '',
-  base_price: '',
+const EMPTY_FORM = { name: '', description: '', base_price: '' }
+
+function toFormData(drink) {
+  return {
+    name: drink.name || '',
+    description: drink.description || '',
+    base_price: String(drink.base_price ?? ''),
+  }
+}
+
+function buildPayload(formData) {
+  return { ...formData, base_price: Number(formData.base_price) }
 }
 
 function AdminDrinksPage() {
-  const navigate = useNavigate()
-  const { logout } = useAuth()
-  const [drinks, setDrinks] = useState([])
-  const [formData, setFormData] = useState(EMPTY_FORM)
-  const [editingDrinkId, setEditingDrinkId] = useState(null)
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSaving, setIsSaving] = useState(false)
-
-  useEffect(() => {
-    loadDrinks()
-  }, [])
-
-  const isEditing = useMemo(() => editingDrinkId !== null, [editingDrinkId])
-
-  async function loadDrinks() {
-    setIsLoading(true)
-    setError('')
-
-    try {
-      const { data } = await apiClient.get('/api/v1/drinks')
-      setDrinks(data.drinks || [])
-    } catch {
-      setError('Unable to load drinks right now.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  function startEdit(drink) {
-    setEditingDrinkId(drink.id)
-    setFormData({
-      name: drink.name || '',
-      description: drink.description || '',
-      base_price: String(drink.base_price ?? ''),
-    })
-    setError('')
-  }
-
-  function resetForm() {
-    setEditingDrinkId(null)
-    setFormData(EMPTY_FORM)
-    setError('')
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setIsSaving(true)
-    setError('')
-
-    const payload = {
-      ...formData,
-      base_price: Number(formData.base_price),
-    }
-
-    try {
-      if (isEditing) {
-        await apiClient.patch(`/api/v1/drinks/${editingDrinkId}`, payload)
-      } else {
-        await apiClient.post('/api/v1/drinks', payload)
-      }
-
-      await loadDrinks()
-      resetForm()
-    } catch (apiError) {
-      const message = apiError?.response?.data?.error || 'Unable to save drink.'
-      setError(message)
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
-  async function handleDelete(drink) {
-    const didConfirm = window.confirm(`Delete "${drink.name}"?`)
-    if (!didConfirm) return
-
-    try {
-      await apiClient.delete(`/api/v1/drinks/${drink.id}`)
-      await loadDrinks()
-      if (editingDrinkId === drink.id) resetForm()
-    } catch (apiError) {
-      const message = apiError?.response?.data?.error || 'Unable to delete drink.'
-      setError(message)
-    }
-  }
-
-  async function handleLogout() {
-    await logout()
-    navigate('/admin/login')
-  }
+  const {
+    records: drinks,
+    formData,
+    isEditing,
+    isLoading,
+    isSaving,
+    error,
+    startEdit,
+    resetForm,
+    updateField,
+    handleSubmit,
+    handleDelete,
+    handleLogout,
+  } = useAdminCrud({
+    endpoint: '/api/v1/drinks',
+    dataKey: 'drinks',
+    emptyForm: EMPTY_FORM,
+    buildPayload,
+  })
 
   return (
     <main className="page-wrapper">
@@ -127,7 +61,7 @@ function AdminDrinksPage() {
           <input
             id="drink-name"
             value={formData.name}
-            onChange={(event) => setFormData((prev) => ({ ...prev, name: event.target.value }))}
+            onChange={(event) => updateField('name', event.target.value)}
             required
           />
 
@@ -136,7 +70,7 @@ function AdminDrinksPage() {
             id="drink-description"
             rows="3"
             value={formData.description}
-            onChange={(event) => setFormData((prev) => ({ ...prev, description: event.target.value }))}
+            onChange={(event) => updateField('description', event.target.value)}
           />
 
           <label htmlFor="drink-price">Base price</label>
@@ -146,7 +80,7 @@ function AdminDrinksPage() {
             step="0.01"
             min="0.01"
             value={formData.base_price}
-            onChange={(event) => setFormData((prev) => ({ ...prev, base_price: event.target.value }))}
+            onChange={(event) => updateField('base_price', event.target.value)}
             required
           />
 
@@ -177,7 +111,7 @@ function AdminDrinksPage() {
                 <p className="drink-price">${Number(drink.base_price).toFixed(2)}</p>
               </div>
               <div className="row-actions">
-                <button type="button" className="secondary-button" onClick={() => startEdit(drink)}>
+                <button type="button" className="secondary-button" onClick={() => startEdit(drink, toFormData)}>
                   Edit
                 </button>
                 <button type="button" className="danger-button" onClick={() => handleDelete(drink)}>

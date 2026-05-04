@@ -24,10 +24,6 @@ function App() {
       <Route path="/admin" element={<AdminLandingRedirect />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route
-        path="/admin/dashboard"
-        element={<Navigate to="/admin/drinks" replace />}
-      />
-      <Route
         path="/admin/drinks"
         element={
           <ProtectedRoute>

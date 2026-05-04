@@ -23,6 +23,15 @@ class Order < ActiveRecord::Base
   def assign_order_number
     return if order_number.present?
 
-    self.order_number = (Order.maximum(:order_number) || 999) + 1
+    self.order_number = self.class.next_order_number
+  end
+
+  def self.next_order_number
+    adapter = connection.adapter_name.downcase
+    if adapter.include?("postgresql")
+      connection.execute("SELECT pg_advisory_xact_lock(42)")
+    end
+
+    (maximum(:order_number) || 999) + 1
   end
 end
