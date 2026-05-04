@@ -28,11 +28,42 @@ Our engineers use a rubric when reviewing your submission. You can see what we e
 
 ## How to run (your app)
 
-In your fork, replace this section with clear instructions for reviewers:
+### Run locally
 
-- **Run locally:** How to install dependencies, set any required env vars, and start the app (e.g. `npm start`, `docker-compose up`).
-- **Deploy:** How you deployed it and the URL (or add the live URL in your PR description).
-- **Admin login:** Because sign-up is not required, provide either (a) the credentials to log into the admin section (e.g. username/password for a seed or default admin), or (b) exact steps to create an admin user so we can sign in and test the admin stories. Don't leave this out — we need to access the admin area to review your work.
+1. Clone the repo and install dependencies:
+   ```bash
+   cd backend && bundle install
+   cd ../frontend && npm install
+   ```
+2. Configure backend env vars:
+   - Copy `backend/.env.example` to `backend/.env`
+   - Update values if needed (`JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `FRONTEND_ORIGIN`)
+3. Run backend migrations + seed:
+   ```bash
+   cd backend
+   bundle exec rake db:migrate db:seed
+   ```
+4. Start backend:
+   ```bash
+   bundle exec rackup -p 4567
+   ```
+5. In a second terminal, start frontend:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+6. Open `http://localhost:5173`.
+
+### Deploy
+
+- **Frontend:** Netlify
+- **Backend + DB:** Render web service + Render Postgres
+- **Live app URL:** [https://cool-pika-d2037a.netlify.app/](https://cool-pika-d2037a.netlify.app/)
+
+### Admin login
+
+- **Email:** `admin@bloom.coffee`
+- **Password:** `password123`
 
 ---
 

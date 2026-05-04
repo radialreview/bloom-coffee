@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { apiClient } from '../api/client'
 import { useOrder } from '../context/useOrder'
@@ -15,6 +15,7 @@ function CustomerMenuPage() {
   const [selectedAddOnIds, setSelectedAddOnIds] = useState([])
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const customizerRef = useRef(null)
 
   useEffect(() => {
     let active = true
@@ -54,6 +55,12 @@ function CustomerMenuPage() {
     const addOnTotal = selectedAddOns.reduce((sum, addOn) => sum + Number(addOn.price), 0)
     return Number(activeDrink.base_price) + addOnTotal
   }, [activeDrink, selectedAddOns])
+
+  useEffect(() => {
+    if (!activeDrink || !customizerRef.current) return
+
+    customizerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [activeDrink])
 
   function openCustomizer(drinkId) {
     setActiveDrinkId(drinkId)
@@ -102,7 +109,7 @@ function CustomerMenuPage() {
       </section>
 
       {activeDrink ? (
-        <section className="customizer-card">
+        <section ref={customizerRef} className="customizer-card">
           <h2>Customize {activeDrink.name}</h2>
           <p className="subtle-text">Select add-ons and preview line total.</p>
 
