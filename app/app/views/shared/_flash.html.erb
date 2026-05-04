@@ -1,0 +1,17 @@
+<div id="flash">
+  <% if notice.present? %>
+    <div class="border-b border-emerald-200 bg-emerald-50 px-4 py-2 text-center text-sm text-emerald-800"
+         role="status"
+         data-turbo-temporary>
+      <%= notice %>
+    </div>
+  <% end %>
+
+  <% if alert.present? %>
+    <div class="border-b border-red-200 bg-red-50 px-4 py-2 text-center text-sm text-red-800"
+         role="alert"
+         data-turbo-temporary>
+      <%= alert %>
+    </div>
+  <% end %>
+</div>

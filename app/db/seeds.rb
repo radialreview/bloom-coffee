@@ -1,9 +1,16 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
+# Optional: seed a default admin (idempotent).
 #
-# Example:
+#   ADMIN_EMAIL=admin@bloomcoffee.test ADMIN_PASSWORD=changeme123 bin/rails db:seed
 #
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+email = ENV["ADMIN_EMAIL"].to_s.strip.presence
+password = ENV["ADMIN_PASSWORD"].to_s.presence
+
+if email.blank? || password.blank?
+  warn "[seeds] Skipped admin seed: set ADMIN_EMAIL and ADMIN_PASSWORD to seed an admin."
+else
+  admin = Admin.find_or_initialize_by(email: email)
+  admin.password = password
+  admin.password_confirmation = password
+  admin.save!
+  puts "[seeds] Ensured admin user '#{admin.email}'."
+end

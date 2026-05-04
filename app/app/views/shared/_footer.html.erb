@@ -1,0 +1,21 @@
+<%
+  current = request.path
+  tab_base = "flex flex-1 flex-col items-center justify-center gap-0.5 min-h-11 px-2 py-2 text-[0.6875rem] font-semibold no-underline transition active:opacity-70"
+  active_cls = "text-amber-800"
+  inactive_cls = "text-stone-400"
+  admin_tab_active = current.start_with?("/admin")
+%>
+
+<footer
+  class="fixed inset-x-0 bottom-0 z-20 flex min-h-14 border-t border-cream-dark bg-cream/90 backdrop-blur-md"
+  role="contentinfo">
+  <nav class="flex min-h-14 max-w-lg mx-auto" aria-label="Primary">
+    <%= link_to admin_root_path,
+          class: "#{tab_base} #{admin_tab_active ? active_cls : inactive_cls}" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0" aria-hidden="true">
+        <rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/>
+      </svg>
+      <span>Management</span>
+    <% end %>
+  </nav>
+</footer>

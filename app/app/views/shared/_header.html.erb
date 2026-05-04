@@ -1,0 +1,21 @@
+<header
+  class="sticky top-0 z-30 flex min-h-12 shrink-0 items-center justify-between gap-3 border-b border-cream-dark bg-cream/90 px-4 backdrop-blur-md"
+  role="banner">
+  <%= link_to root_path,
+        class: "rounded no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700" do %>
+    <span class="text-[0.9375rem] font-serif font-semibold text-amber-900">Bloom Coffee</span>
+  <% end %>
+
+  <nav class="flex items-center gap-3" aria-label="Account">
+    <% if admin_signed_in? %>
+      <%= button_to "Sign out",
+            admin_logout_path,
+            method: :delete,
+            form_class: "inline",
+            class: "m-0 cursor-pointer border-0 bg-transparent p-0 text-sm font-semibold text-stone-900 hover:text-amber-800" %>
+    <% else %>
+      <%= link_to "Log in", admin_login_path,
+            class: "rounded text-sm font-semibold text-stone-900 hover:text-amber-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700" %>
+    <% end %>
+  </nav>
+</header>
