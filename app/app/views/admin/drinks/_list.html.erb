@@ -1,7 +1,9 @@
-<ul id="drinks" class="list-none p-0 m-0 mb-4 flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
-  <%= render drinks %>
-</ul>
+<div id="drinks_mount">
+  <div id="drinks" class="list-none p-0 m-0 mb-4 flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
+    <%= render drinks %>
+  </div>
 
-<% if drinks.empty? %>
-  <p id="drinks_empty" class="mb-4 text-stone-600">No drinks yet. Add the first one below.</p>
-<% end %>
+  <% if drinks.empty? %>
+    <p id="drinks_empty" class="mb-4 text-stone-600">No drinks yet. Add the first one below.</p>
+  <% end %>
+</div>

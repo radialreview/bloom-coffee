@@ -60,11 +60,50 @@ RSpec.describe "Admin drinks", type: :request do
       expect(drink.price).to eq(5.75)
     end
 
-    it "deletes a drink" do
+    it "deletes a drink and redirects" do
       expect do
         delete admin_drink_path(drink)
       end.to change(Drink, :count).by(-1)
+
       expect(response).to redirect_to(admin_drinks_path)
+    end
+
+    it "responds to turbo_stream destroy by removing the row and updating flash" do
+      expect do
+        delete admin_drink_path(drink),
+          headers: { "Accept" => Mime[:turbo_stream].to_s }
+      end.to change(Drink, :count).by(-1)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq(Mime[:turbo_stream])
+      expect(response.body).to include(%(target="drink_#{drink.id}"))
+      expect(response.body).to include("Deleted drink &#39;Mocha&#39;.")
+    end
+
+    it "does not delete a drink referenced by orders; turbo_stream shows flash alert" do
+      order = create(:order)
+      create(:order_item, order: order, drink: drink)
+
+      expect do
+        delete admin_drink_path(drink),
+          headers: { "Accept" => Mime[:turbo_stream].to_s }
+      end.not_to change(Drink, :count)
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.media_type).to eq(Mime[:turbo_stream])
+      expect(response.body).to include("Cannot delete")
+      expect(response.body).to include("flash")
+    end
+
+    it "does not delete a drink referenced by orders; HTML redirects with alert" do
+      order = create(:order)
+      create(:order_item, order: order, drink: drink)
+
+      delete admin_drink_path(drink)
+
+      expect(response).to redirect_to(admin_drinks_path)
+      follow_redirect!
+      expect(response.body).to include("Cannot delete")
     end
   end
 end

@@ -38,11 +38,19 @@ class Admin::DrinksController < Admin::BaseController
   end
 
   def destroy
+    name = @drink.name
     @drink.destroy!
-    flash.now[:notice] = "Deleted drink '#{@drink.name}'."
+    flash.now[:notice] = "Deleted drink '#{name}'."
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to admin_drinks_path, notice: flash.now[:notice] }
+    end
+  rescue ActiveRecord::DeleteRestrictionError
+    flash.now[:alert] =
+      "Cannot delete '#{@drink.name}' because it appears on one or more orders."
+    respond_to do |format|
+      format.turbo_stream { render :destroy_failure, status: :unprocessable_content }
+      format.html { redirect_to admin_drinks_path, alert: flash.now[:alert] }
     end
   end
 

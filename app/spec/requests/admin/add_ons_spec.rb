@@ -96,6 +96,32 @@ RSpec.describe "Admin::AddOns", type: :request do
         expect(response.body).to include(%(target="add_on_#{add_on.id}"))
         expect(response.body).to include("Deleted add-on &#39;Oat milk&#39;.")
       end
+
+      it "does not delete add-on referenced on an order item; turbo_stream shows alert" do
+        order_item = create(:order_item)
+        create(:order_item_add_on, order_item: order_item, add_on: add_on)
+
+        expect do
+          delete admin_add_on_path(add_on),
+            headers: { "Accept" => Mime[:turbo_stream].to_s }
+        end.not_to change(AddOn, :count)
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.media_type).to eq(Mime[:turbo_stream])
+        expect(response.body).to include("Cannot delete")
+        expect(response.body).to include(%(target="flash"))
+      end
+
+      it "does not delete add-on referenced on an order item; HTML redirects with alert" do
+        order_item = create(:order_item)
+        create(:order_item_add_on, order_item: order_item, add_on: add_on)
+
+        delete admin_add_on_path(add_on)
+
+        expect(response).to redirect_to(admin_add_ons_path)
+        follow_redirect!
+        expect(response.body).to include("Cannot delete")
+      end
     end
 
     describe "Turbo Frame interactions" do

@@ -38,11 +38,19 @@ class Admin::AddOnsController < Admin::BaseController
   end
 
   def destroy
+    name = @add_on.name
     @add_on.destroy!
-    flash.now[:notice] = "Deleted add-on '#{@add_on.name}'."
+    flash.now[:notice] = "Deleted add-on '#{name}'."
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to admin_add_ons_path, notice: flash.now[:notice] }
+    end
+  rescue ActiveRecord::DeleteRestrictionError
+    flash.now[:alert] =
+      "Cannot delete '#{@add_on.name}' because it appears on one or more orders."
+    respond_to do |format|
+      format.turbo_stream { render :destroy_failure, status: :unprocessable_content }
+      format.html { redirect_to admin_add_ons_path, alert: flash.now[:alert] }
     end
   end
 

@@ -1,5 +1,7 @@
 <%= turbo_stream.remove dom_id(@add_on) %>
 <% if AddOn.none? %>
-  <%= turbo_stream.replace "add_ons", partial: "admin/add_ons/list", locals: { add_ons: [] } %>
+  <%= turbo_stream.replace "add_ons_mount",
+        partial: "admin/add_ons/list",
+        locals: { add_ons: [] } %>
 <% end %>
 <%= turbo_stream.replace "flash", partial: "shared/flash" %>

@@ -1,5 +1,7 @@
 <%= turbo_stream.remove dom_id(@drink) %>
 <% if Drink.none? %>
-  <%= turbo_stream.replace "drinks", partial: "admin/drinks/list", locals: { drinks: [] } %>
+  <%= turbo_stream.replace "drinks_mount",
+        partial: "admin/drinks/list",
+        locals: { drinks: [] } %>
 <% end %>
 <%= turbo_stream.replace "flash", partial: "shared/flash" %>
