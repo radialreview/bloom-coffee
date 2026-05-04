@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include CartConcern
+
   allow_browser versions: :modern
 
   helper_method :current_admin, :admin_signed_in?

@@ -8,7 +8,6 @@ RSpec.describe "db/seeds.rb (admin)" do
     ENV["ADMIN_PASSWORD"] = "password123"
     example.run
   ensure
-    Admin.where(email: "seeded-admin@example.test").delete_all
     previous_email ? ENV["ADMIN_EMAIL"] = previous_email : ENV.delete("ADMIN_EMAIL")
     previous_password ? ENV["ADMIN_PASSWORD"] = previous_password : ENV.delete("ADMIN_PASSWORD")
   end

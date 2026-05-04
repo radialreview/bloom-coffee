@@ -41,6 +41,7 @@ RSpec.describe "Admin authentication", type: :request do
       post "/admin/login", params: { session: { email: admin.email, password: "password123" } }
       get "/admin"
       expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Manage menu")
     end
   end
 

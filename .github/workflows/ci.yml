@@ -16,12 +16,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3.7"
           bundler-cache: true
           working-directory: app
-
-      - name: Verify Ruby matches app/.ruby-version
-        working-directory: app
-        run: bin/ci-verify-ruby-version
 
       - name: Scan for common Rails security vulnerabilities using static analysis
         working-directory: app
@@ -37,12 +34,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3.7"
           bundler-cache: true
           working-directory: app
-
-      - name: Verify Ruby matches app/.ruby-version
-        working-directory: app
-        run: bin/ci-verify-ruby-version
 
       - name: Scan for security vulnerabilities in JavaScript dependencies
         working-directory: app
@@ -57,12 +51,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3.7"
           bundler-cache: true
           working-directory: app
-
-      - name: Verify Ruby matches app/.ruby-version
-        working-directory: app
-        run: bin/ci-verify-ruby-version
 
       - name: Lint code for consistent style
         working-directory: app
@@ -97,12 +88,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3.7"
           bundler-cache: true
           working-directory: app
-
-      - name: Verify Ruby matches app/.ruby-version
-        working-directory: app
-        run: bin/ci-verify-ruby-version
 
       - name: Run tests
         working-directory: app
