@@ -32,3 +32,20 @@
   --color-stone-800: #1f3b2f;
   --color-stone-900: #162e25;
 }
+
+/* Mobile keyboards: Safari zooms inputs <16px and fixed tab bars obscure fields — keep sane defaults. */
+@layer base {
+  html {
+    /* Space above fixed bottom nav when UA scrolls to focused inputs */
+    scroll-padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+    /* Avoid accidental horizontal drift when the visual viewport jumps */
+    overflow-x: hidden;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
