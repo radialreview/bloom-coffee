@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { apiClient } from '../api/client'
 import { useOrder } from '../context/useOrder'
 
 function formatMoney(value) {
@@ -6,7 +8,36 @@ function formatMoney(value) {
 }
 
 function CustomerOrderPage() {
-  const { items, itemCount, total, removeItem, updateQuantity } = useOrder()
+  const navigate = useNavigate()
+  const { items, itemCount, total, removeItem, updateQuantity, clearOrder } = useOrder()
+  const [customerName, setCustomerName] = useState('')
+  const [submitError, setSubmitError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  async function handleSubmitOrder() {
+    setSubmitError('')
+    setIsSubmitting(true)
+
+    try {
+      const payload = {
+        customer_name: customerName.trim(),
+        items: items.map((item) => ({
+          drink_id: item.drink.id,
+          quantity: item.quantity,
+          add_on_ids: item.addOns.map((addOn) => addOn.id),
+        })),
+      }
+
+      const { data } = await apiClient.post('/api/v1/orders', payload)
+      clearOrder()
+      navigate(`/order/confirmation/${data.order.id}`, { state: { order: data.order } })
+    } catch (apiError) {
+      const message = apiError?.response?.data?.error || 'Unable to place your order right now.'
+      setSubmitError(message)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
     <main className="customer-page">
@@ -67,6 +98,28 @@ function CustomerOrderPage() {
           Total: <strong>{formatMoney(total)}</strong>
         </p>
       </footer>
+
+      {items.length > 0 ? (
+        <section className="checkout-card">
+          <h2>Checkout</h2>
+          <label htmlFor="customer-name">Name for pickup</label>
+          <input
+            id="customer-name"
+            value={customerName}
+            onChange={(event) => setCustomerName(event.target.value)}
+            placeholder="Jordan"
+            required
+          />
+          {submitError ? <p className="error-text">{submitError}</p> : null}
+          <button
+            type="button"
+            onClick={handleSubmitOrder}
+            disabled={isSubmitting || customerName.trim().length === 0}
+          >
+            {isSubmitting ? 'Placing order...' : 'Place order'}
+          </button>
+        </section>
+      ) : null}
     </main>
   )
 }
