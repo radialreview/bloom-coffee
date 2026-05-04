@@ -8,11 +8,11 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
 
-  /* Warm light yellow (“연한 노랑”) page chrome — body bg-cream */
+  /* Warm light yellow theme page chrome — body bg-cream */
   --color-cream: #fcf7e8;
   --color-cream-dark: #e8dcbc;
 
-  /* `amber-*` in templates → emerald-forest accents on yellow */
+  /* `amber-*` in templates → forest green accents on yellow */
   --color-amber-50: #f4fcf5;
   --color-amber-500: #2d8f4e;
   --color-amber-700: #1f703a;
@@ -20,7 +20,7 @@
   --color-amber-900: #123d24;
   --color-amber-950: #0c2a18;
 
-  /* `stone-*` → dark greens for headings/body/copy (진한 초록 글씨) */
+  /* `stone-*` → dark green for headings/body/copy */
   --color-stone-50: #fafdf8;
   --color-stone-100: #f1f8f0;
   --color-stone-200: #d9ead8;
