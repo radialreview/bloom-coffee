@@ -10,17 +10,18 @@ module CartConcern
   def current_order
     return @_current_order if defined?(@_current_order)
 
-    @_current_order = begin
-      return nil unless session[:order_id]
-
-      order = Order.find_by(id: session[:order_id], status: :in_progress)
-      unless order
-        session.delete(:order_id)
+    @_current_order =
+      if session[:order_id].blank?
         nil
       else
-        order
+        order = Order.find_by(id: session[:order_id], status: :in_progress)
+        if order
+          order
+        else
+          session.delete(:order_id)
+          nil
+        end
       end
-    end
   end
 
   def current_or_create_order
@@ -38,6 +39,7 @@ module CartConcern
 
     order = Order.create!(status: :in_progress)
     session[:order_id] = order.id
+    @_current_order = order
     order
   end
 end
