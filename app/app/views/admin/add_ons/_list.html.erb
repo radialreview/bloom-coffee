@@ -1,0 +1,9 @@
+<div id="add_ons_mount">
+  <div id="add_ons" class="list-none p-0 m-0 mb-4 flex flex-col gap-2 max-h-[60vh] overflow-y-auto">
+    <%= render add_ons %>
+  </div>
+
+  <% if add_ons.empty? %>
+    <p id="add_ons_empty" class="mb-4 text-stone-600">No add-ons yet. Add the first one below.</p>
+  <% end %>
+</div>

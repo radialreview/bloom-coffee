@@ -1,0 +1,28 @@
+<%= turbo_frame_tag drink do %>
+  <div class="flex items-center justify-between gap-3 px-3 py-2.5 bg-white border border-stone-200 rounded-lg">
+    <span class="flex flex-col">
+      <span class="font-semibold"><%= drink.name %></span>
+      <% if drink.description.present? %>
+        <small class="text-stone-500"><%= truncate(drink.description, length: 60) %></small>
+      <% end %>
+      <small class="text-stone-500"><%= number_to_currency(drink.price) %></small>
+    </span>
+
+    <span class="flex items-center gap-3">
+      <%= link_to "Edit", edit_admin_drink_path(drink),
+            data: { turbo_frame: dom_id(drink) },
+            class: "text-sm font-semibold text-stone-900 hover:text-amber-800" %>
+      <%= button_to "Delete",
+            admin_drink_path(drink),
+            method: :delete,
+            form: {
+              data: {
+                turbo_frame: "_top",
+                turbo_confirm: "Delete '#{drink.name}'? It will disappear from the menu."
+              }
+            },
+            class: "px-3 py-1.5 rounded-lg border border-stone-200 bg-white
+                    text-stone-900 text-sm font-semibold cursor-pointer" %>
+    </span>
+  </div>
+<% end %>

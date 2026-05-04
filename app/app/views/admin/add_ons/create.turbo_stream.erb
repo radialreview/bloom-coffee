@@ -1,0 +1,4 @@
+<%= turbo_stream.append "add_ons", partial: "admin/add_ons/add_on", locals: { add_on: @add_on } %>
+<%= turbo_stream.remove "add_ons_empty" %>
+<%= turbo_stream.replace "new_add_on", partial: "admin/add_ons/new_add_on_frame" %>
+<%= turbo_stream.replace "flash",      partial: "shared/flash" %>

@@ -1,0 +1,19 @@
+<header
+  class="sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 min-h-12 px-4 bg-white border-b border-stone-200 shadow-sm"
+  role="banner">
+  <%= link_to root_path,
+        class: "no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 rounded" do %>
+    <span class="text-[0.9375rem] font-serif font-semibold text-amber-900">Bloom Coffee</span>
+  <% end %>
+
+  <% if admin_signed_in? %>
+    <%= button_to "Sign out",
+          admin_logout_path,
+          method: :delete,
+          form_class: "inline",
+          class: "text-sm font-semibold text-stone-900 hover:text-amber-800 bg-transparent border-0 p-0 m-0 cursor-pointer" %>
+  <% else %>
+    <%= link_to "Log in", admin_login_path,
+          class: "text-sm font-semibold text-stone-900 hover:text-amber-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700 rounded" %>
+  <% end %>
+</header>

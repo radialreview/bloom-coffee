@@ -1,0 +1,2 @@
+<%= turbo_stream.replace dom_id(@add_on), partial: "admin/add_ons/add_on", locals: { add_on: @add_on } %>
+<%= turbo_stream.replace "flash",         partial: "shared/flash" %>

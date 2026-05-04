@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/*
+ * Buttercream yellow page + forest green typography (body uses text-stone-900 via theme skew).
+ * Accents/buttons reuse `amber-*` class names mapped to greens.
+ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+
+  /* Warm light yellow theme page chrome — body bg-cream */
+  --color-cream: #fcf7e8;
+  --color-cream-dark: #e8dcbc;
+
+  /* `amber-*` in templates → forest green accents on yellow */
+  --color-amber-50: #f4fcf5;
+  --color-amber-500: #2d8f4e;
+  --color-amber-700: #1f703a;
+  --color-amber-800: #185a30;
+  --color-amber-900: #123d24;
+  --color-amber-950: #0c2a18;
+
+  /* `stone-*` → dark green for headings/body/copy */
+  --color-stone-50: #fafdf8;
+  --color-stone-100: #f1f8f0;
+  --color-stone-200: #d9ead8;
+  --color-stone-300: #a8c9ac;
+  --color-stone-400: #6b9574;
+  --color-stone-500: #4a7460;
+  --color-stone-600: #345c48;
+  --color-stone-700: #284a3a;
+  --color-stone-800: #1f3b2f;
+  --color-stone-900: #162e25;
+}
+
+/* Mobile keyboards: Safari zooms inputs <16px and fixed tab bars obscure fields — keep sane defaults. */
+@layer base {
+  html {
+    /* Space above fixed bottom nav when UA scrolls to focused inputs */
+    scroll-padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
+    /* Avoid accidental horizontal drift when the visual viewport jumps */
+    overflow-x: hidden;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="image"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
