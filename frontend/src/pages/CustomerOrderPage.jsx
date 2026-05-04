@@ -44,7 +44,7 @@ function CustomerOrderPage() {
       <header className="customer-header">
         <div>
           <h1>Your Order</h1>
-          <p className="subtle-text">Review items, update quantities, and keep your running total accurate.</p>
+          <p className="subtle-text">Take a quick look before we start brewing.</p>
         </div>
         <Link className="secondary-button inline-link-button" to="/menu">
           Back to menu
@@ -107,7 +107,7 @@ function CustomerOrderPage() {
             id="customer-name"
             value={customerName}
             onChange={(event) => setCustomerName(event.target.value)}
-            placeholder="Jordan"
+            placeholder="What should we call out?"
             required
           />
           {submitError ? <p className="error-text">{submitError}</p> : null}

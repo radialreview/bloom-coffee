@@ -42,7 +42,7 @@ function OrderConfirmationPage() {
       <header className="customer-header">
         <div>
           <h1>Order Confirmed</h1>
-          <p className="subtle-text">Your order has been received.</p>
+          <p className="subtle-text">Thanks for stopping by Bloom Coffee.</p>
         </div>
       </header>
 
@@ -78,7 +78,7 @@ function OrderConfirmationPage() {
       ) : null}
 
       <Link className="inline-link-button" to="/menu">
-        Start new order
+        Start another order
       </Link>
     </main>
   )

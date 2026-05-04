@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/useAuth'
 
 function AdminLoginPage() {
@@ -57,6 +57,13 @@ function AdminLoginPage() {
             {isSubmitting ? 'Signing in...' : 'Sign in'}
           </button>
         </form>
+
+        <p className="auth-card-footer">
+          Looking for the customer view?{" "}
+          <Link className="card-text-link" to="/menu">
+            Open the menu
+          </Link>
+        </p>
       </section>
     </main>
   )

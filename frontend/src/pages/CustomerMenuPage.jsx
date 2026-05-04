@@ -78,7 +78,7 @@ function CustomerMenuPage() {
       <header className="customer-header">
         <div>
           <h1>Bloom Coffee Menu</h1>
-          <p className="subtle-text">Choose your drink, customize with add-ons, and build your order.</p>
+          <p className="subtle-text">Slow morning energy in a cup. Choose your drink and make it yours.</p>
         </div>
         <Link className="secondary-button inline-link-button" to="/admin/login">
           Admin login
@@ -95,7 +95,7 @@ function CustomerMenuPage() {
             <p className="subtle-text">{drink.description || 'No description.'}</p>
             <p className="drink-price">{formatMoney(drink.base_price)}</p>
             <button type="button" onClick={() => openCustomizer(drink.id)}>
-              Customize & add
+              Customize
             </button>
           </article>
         ))}
@@ -145,7 +145,7 @@ function CustomerMenuPage() {
           Total: <strong>{formatMoney(total)}</strong>
         </p>
         <Link className="inline-link-button" to="/order">
-          View order
+          Review order
         </Link>
       </footer>
     </main>
