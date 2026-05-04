@@ -1,15 +1,16 @@
 require "bundler/setup"
-Bundler.require(:default)
-
 require "dotenv/load"
+
 require "sinatra/base"
-require "sinatra/json"
-require "sinatra/activerecord"
 require "jwt"
 require "bcrypt"
 require "time"
+require "sinatra/json"
+require "sinatra/activerecord"
+require "rack/cors"
 
-set :database_file, File.expand_path("./database.yml", __dir__)
+# Ensure Sinatra has a deterministic environment value.
+ENV["RACK_ENV"] ||= ENV["SINATRA_ENV"] || "development"
 
 require_relative "../app/controllers/api/v1/base_controller"
 require_relative "../app/controllers/api/v1/sessions_controller"
