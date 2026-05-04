@@ -1,9 +1,6 @@
 module Api
   module V1
     class BaseController < Sinatra::Base
-      register Sinatra::ActiveRecordExtension
-      helpers Sinatra::JSON
-
       configure do
         set :show_exceptions, false
         set :raise_errors, false
@@ -17,6 +14,9 @@ module Api
           set :database, database_url
         end
       end
+
+      register Sinatra::ActiveRecordExtension
+      helpers Sinatra::JSON
 
       before do
         content_type :json
