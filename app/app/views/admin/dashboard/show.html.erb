@@ -13,5 +13,14 @@
       <%= link_to "Manage", admin_drinks_path,
             class: "shrink-0 text-sm font-semibold text-amber-800 hover:underline" %>
     </li>
+
+    <li class="flex items-center justify-between gap-3 rounded-lg border border-stone-300 bg-white px-3 py-3 shadow-sm">
+      <span class="flex flex-col">
+        <span class="font-semibold text-stone-900">Add-ons</span>
+        <small class="text-stone-500">Extras like oat milk or extra shot.</small>
+      </span>
+      <%= link_to "Manage", admin_add_ons_path,
+            class: "shrink-0 text-sm font-semibold text-amber-800 hover:underline" %>
+    </li>
   </ul>
 </section>

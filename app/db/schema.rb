@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_04_200000) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_04_211000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "add_ons", force: :cascade do |t|
+    t.string "name", null: false
+    t.decimal "price", precision: 6, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "lower((name)::text)", name: "index_add_ons_on_lower_name", unique: true
+  end
 
   create_table "admins", force: :cascade do |t|
     t.string "email"

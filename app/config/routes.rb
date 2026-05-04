@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
     root "dashboard#show"
 
-    resources :drinks, except: %i[show]
+    resources :drinks,  except: %i[show]
+    resources :add_ons, except: %i[show]
   end
 end

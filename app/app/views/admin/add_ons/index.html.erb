@@ -1,0 +1,15 @@
+<section class="w-full max-w-md text-left mt-[clamp(1rem,6vh,3rem)]">
+  <header class="flex items-baseline justify-between gap-3 mb-2">
+    <h1 class="m-0 text-2xl font-bold">Add-ons</h1>
+    <%= render "admin/add_ons/new_add_on_trigger" %>
+  </header>
+  <p class="m-0 mb-5 text-stone-600">Manage extras like oat milk or extra shot.</p>
+
+  <%= render "admin/add_ons/new_add_on_frame" %>
+  <%= render "admin/add_ons/list", add_ons: @add_ons %>
+
+  <p class="mt-4">
+    <%= link_to "Back to admin", admin_root_path,
+          class: "text-sm font-semibold text-stone-700 hover:text-amber-800" %>
+  </p>
+</section>

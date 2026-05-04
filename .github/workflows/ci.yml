@@ -19,6 +19,10 @@ jobs:
           bundler-cache: true
           working-directory: app
 
+      - name: Verify Ruby matches app/.ruby-version
+        working-directory: app
+        run: bin/ci-verify-ruby-version
+
       - name: Scan for common Rails security vulnerabilities using static analysis
         working-directory: app
         run: bin/brakeman --no-pager
@@ -36,6 +40,10 @@ jobs:
           bundler-cache: true
           working-directory: app
 
+      - name: Verify Ruby matches app/.ruby-version
+        working-directory: app
+        run: bin/ci-verify-ruby-version
+
       - name: Scan for security vulnerabilities in JavaScript dependencies
         working-directory: app
         run: bin/importmap audit
@@ -51,6 +59,10 @@ jobs:
         with:
           bundler-cache: true
           working-directory: app
+
+      - name: Verify Ruby matches app/.ruby-version
+        working-directory: app
+        run: bin/ci-verify-ruby-version
 
       - name: Lint code for consistent style
         working-directory: app
@@ -87,6 +99,10 @@ jobs:
         with:
           bundler-cache: true
           working-directory: app
+
+      - name: Verify Ruby matches app/.ruby-version
+        working-directory: app
+        run: bin/ci-verify-ruby-version
 
       - name: Run tests
         working-directory: app

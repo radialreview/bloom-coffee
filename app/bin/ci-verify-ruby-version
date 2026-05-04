@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Fail CI if the active Ruby does not match app/.ruby-version (run from app/ or set cwd).
+set -euo pipefail
+want=$(tr -d '[:space:]' < .ruby-version)
+got=$(ruby -e 'puts RUBY_VERSION')
+if [ "$want" != "$got" ]; then
+  echo "::error::Ruby $got != .ruby-version ($want)"
+  exit 1
+fi
