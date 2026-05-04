@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_04_183210) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_04_200001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_183210) do
     t.string "name", null: false
     t.decimal "price", precision: 8, scale: 2, null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_add_ons_on_name", unique: true
   end
 
   create_table "admins", force: :cascade do |t|
@@ -35,6 +36,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_183210) do
     t.text "description"
     t.string "name", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_drinks_on_name", unique: true
   end
 
   create_table "order_item_add_ons", force: :cascade do |t|
@@ -63,9 +65,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_04_183210) do
     t.datetime "created_at", null: false
     t.string "customer_name", null: false
     t.integer "order_number", null: false
+    t.string "public_token"
     t.decimal "total", precision: 10, scale: 2, default: "0.0", null: false
     t.datetime "updated_at", null: false
     t.index ["order_number"], name: "index_orders_on_order_number", unique: true
+    t.index ["public_token"], name: "index_orders_on_public_token", unique: true
   end
 
   add_foreign_key "order_item_add_ons", "add_ons"

@@ -15,4 +15,10 @@ RSpec.describe AddOn, type: :model do
     add_on = build(:add_on, price: -0.01)
     expect(add_on).not_to be_valid
   end
+
+  it "requires a unique name" do
+    existing = create(:add_on, name: "Oat Milk")
+    duplicate = build(:add_on, name: "Oat Milk")
+    expect(duplicate).not_to be_valid
+  end
 end

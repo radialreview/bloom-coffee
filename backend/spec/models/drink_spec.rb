@@ -15,4 +15,10 @@ RSpec.describe Drink, type: :model do
     drink = build(:drink, base_price: 0)
     expect(drink).not_to be_valid
   end
+
+  it "requires a unique name" do
+    existing = create(:drink, name: "Latte")
+    duplicate = build(:drink, name: "Latte")
+    expect(duplicate).not_to be_valid
+  end
 end

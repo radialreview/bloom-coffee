@@ -40,6 +40,19 @@ RSpec.describe "Sessions API", type: :request do
     expect(last_response.status).to eq(401)
   end
 
+  it "rejects expired JWT tokens" do
+    secret = ENV.fetch("JWT_SECRET", "dev-secret-change-me")
+    expired_token = JWT.encode(
+      { sub: "admin@bloom.coffee", exp: Time.now.to_i - 60 },
+      secret,
+      "HS256",
+    )
+
+    get "/api/v1/admin/session", {}, json_headers(token: expired_token)
+
+    expect(last_response.status).to eq(401)
+  end
+
   it "completes logout for authenticated admin" do
     token = login_token
 

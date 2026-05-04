@@ -12,4 +12,20 @@ RSpec.describe Order, type: :model do
 
     expect(second.order_number).to eq(first.order_number + 1)
   end
+
+  it "generates a public_token on create" do
+    order = create(:order, customer_name: "Jordan")
+    expect(order.public_token).to be_a(String)
+    expect(order.public_token.length).to be > 10
+  end
+
+  it "rejects customer names exceeding 120 characters" do
+    order = build(:order, customer_name: "A" * 121)
+    expect(order).not_to be_valid
+  end
+
+  it "accepts customer names within 120 characters" do
+    order = build(:order, customer_name: "A" * 120)
+    expect(order).to be_valid
+  end
 end

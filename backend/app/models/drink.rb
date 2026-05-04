@@ -1,7 +1,7 @@
 class Drink < ActiveRecord::Base
   has_many :order_items, dependent: :restrict_with_exception
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :base_price, numericality: { greater_than: 0 }
 
   def as_api_json

@@ -27,7 +27,7 @@ function CustomerOrderPage() {
 
       const { data } = await apiClient.post('/api/v1/orders', payload)
       clearOrder()
-      navigate(`/order/confirmation/${data.order.id}`, { state: { order: data.order } })
+      navigate(`/order/confirmation/${data.order.public_token}`, { state: { order: data.order } })
     } catch (apiError) {
       const message = apiError?.response?.data?.error || 'Unable to place your order right now.'
       setSubmitError(message)
@@ -75,7 +75,7 @@ function CustomerOrderPage() {
                   -
                 </button>
                 <span className="quantity-pill">{item.quantity}</span>
-                <button type="button" className="secondary-button" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                <button type="button" className="secondary-button" disabled={item.quantity >= 20} onClick={() => updateQuantity(item.id, item.quantity + 1)}>
                   +
                 </button>
                 <button type="button" className="danger-button" onClick={() => removeItem(item.id)}>

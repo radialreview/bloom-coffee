@@ -1,7 +1,7 @@
 class AddOn < ActiveRecord::Base
   has_many :order_item_add_ons, dependent: :restrict_with_exception
 
-  validates :name, presence: true
+  validates :name, presence: true, uniqueness: true
   validates :price, numericality: { greater_than_or_equal_to: 0 }
 
   def as_api_json

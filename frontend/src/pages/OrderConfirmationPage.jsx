@@ -4,7 +4,7 @@ import { apiClient } from '../api/client'
 import { formatMoney } from '../utils/format'
 
 function OrderConfirmationPage() {
-  const { id } = useParams()
+  const { token } = useParams()
   const location = useLocation()
   const [order, setOrder] = useState(location.state?.order || null)
   const [isLoading, setIsLoading] = useState(!location.state?.order)
@@ -15,7 +15,7 @@ function OrderConfirmationPage() {
     let active = true
 
     apiClient
-      .get(`/api/v1/orders/${id}`)
+      .get(`/api/v1/orders/${token}`)
       .then(({ data }) => {
         if (!active) return
         setOrder(data.order)
@@ -32,7 +32,7 @@ function OrderConfirmationPage() {
     return () => {
       active = false
     }
-  }, [id, order])
+  }, [token, order])
 
   return (
     <main className="customer-page">

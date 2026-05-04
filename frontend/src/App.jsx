@@ -20,7 +20,7 @@ function App() {
       <Route path="/" element={<Navigate to="/menu" replace />} />
       <Route path="/menu" element={<CustomerMenuPage />} />
       <Route path="/order" element={<CustomerOrderPage />} />
-      <Route path="/order/confirmation/:id" element={<OrderConfirmationPage />} />
+      <Route path="/order/confirmation/:token" element={<OrderConfirmationPage />} />
       <Route path="/admin" element={<AdminLandingRedirect />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route

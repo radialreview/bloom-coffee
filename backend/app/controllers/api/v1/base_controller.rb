@@ -34,6 +34,10 @@ module Api
         halt 400, json(error: "Invalid JSON body.")
       end
 
+      error ActiveRecord::DeleteRestrictionError do
+        halt 409, json(error: "Cannot delete: record is referenced by existing orders.")
+      end
+
       error do
         halt 500, json(error: "Unexpected server error")
       end
@@ -47,7 +51,10 @@ module Api
         end
 
         def jwt_secret
-          ENV.fetch("JWT_SECRET", "dev-secret-change-me")
+          ENV.fetch("JWT_SECRET") do
+            raise "JWT_SECRET must be set" if ENV["RACK_ENV"] == "production"
+            "dev-secret-change-me"
+          end
         end
 
         def current_admin

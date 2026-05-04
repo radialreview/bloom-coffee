@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { apiClient, setAuthToken } from '../api/client'
 import { AuthContext } from './auth-context'
 
@@ -9,48 +9,43 @@ export function AuthProvider({ children }) {
   const [isCheckingSession, setIsCheckingSession] = useState(true)
 
   useEffect(() => {
-    if (token) {
-      setAuthToken(token)
-    }
-  }, [token])
-
-  useEffect(() => {
     let active = true
 
-    async function checkSession() {
-      if (!token) {
-        setIsCheckingSession(false)
-        return
-      }
+    if (!token) {
+      setAuthToken(null)
+      setIsCheckingSession(false)
+      return
+    }
 
-      try {
-        await apiClient.get('/api/v1/admin/session')
-        if (!active) return
-        setIsCheckingSession(false)
-      } catch {
+    setAuthToken(token)
+
+    apiClient
+      .get('/api/v1/admin/session')
+      .then(() => {
+        if (active) setIsCheckingSession(false)
+      })
+      .catch(() => {
         if (!active) return
         localStorage.removeItem(TOKEN_KEY)
         setToken(null)
         setAuthToken(null)
         setIsCheckingSession(false)
-      }
-    }
+      })
 
-    checkSession()
     return () => {
       active = false
     }
   }, [token])
 
-  async function login(email, password) {
+  const login = useCallback(async (email, password) => {
     const { data } = await apiClient.post('/api/v1/admin/login', { email, password })
     const nextToken = data.token
     localStorage.setItem(TOKEN_KEY, nextToken)
     setToken(nextToken)
     setAuthToken(nextToken)
-  }
+  }, [])
 
-  async function logout() {
+  const logout = useCallback(async () => {
     try {
       await apiClient.post('/api/v1/admin/logout')
     } catch {
@@ -60,7 +55,7 @@ export function AuthProvider({ children }) {
       setToken(null)
       setAuthToken(null)
     }
-  }
+  }, [])
 
   const value = useMemo(
     () => ({
@@ -70,7 +65,7 @@ export function AuthProvider({ children }) {
       login,
       logout,
     }),
-    [token, isCheckingSession],
+    [token, isCheckingSession, login, logout],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

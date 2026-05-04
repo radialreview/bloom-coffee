@@ -15,6 +15,7 @@ RSpec.describe "Orders API", type: :request do
     expect(last_response.status).to eq(201)
     expect(parsed_json.dig("order", "order_number")).to be >= 1000
     expect(parsed_json.dig("order", "total")).to eq(7.5)
+    expect(parsed_json.dig("order", "public_token")).to be_a(String)
   end
 
   it "returns validation error with empty customer name" do
@@ -50,7 +51,7 @@ RSpec.describe "Orders API", type: :request do
     expect(order["total"]).to eq(12.5)
   end
 
-  it "retrieves an existing order by id" do
+  it "retrieves an existing order by public token" do
     drink = create(:drink, name: "Latte", base_price: 4.75)
 
     post "/api/v1/orders", {
@@ -58,9 +59,9 @@ RSpec.describe "Orders API", type: :request do
       items: [{ drink_id: drink.id, quantity: 1, add_on_ids: [] }],
     }.to_json, json_headers
 
-    order_id = parsed_json.dig("order", "id")
+    public_token = parsed_json.dig("order", "public_token")
 
-    get "/api/v1/orders/#{order_id}"
+    get "/api/v1/orders/#{public_token}"
 
     expect(last_response.status).to eq(200)
     expect(parsed_json.dig("order", "customer_name")).to eq("Jordan")
@@ -68,7 +69,7 @@ RSpec.describe "Orders API", type: :request do
   end
 
   it "returns 404 for non-existent order" do
-    get "/api/v1/orders/999999"
+    get "/api/v1/orders/nonexistent-token"
 
     expect(last_response.status).to eq(404)
   end
@@ -97,6 +98,39 @@ RSpec.describe "Orders API", type: :request do
     post "/api/v1/orders", {
       customer_name: "Jordan",
       items: [{ drink_id: drink.id, quantity: 0, add_on_ids: [] }],
+    }.to_json, json_headers
+
+    expect(last_response.status).to eq(422)
+  end
+
+  it "rejects order with quantity exceeding 20" do
+    drink = create(:drink)
+
+    post "/api/v1/orders", {
+      customer_name: "Jordan",
+      items: [{ drink_id: drink.id, quantity: 21, add_on_ids: [] }],
+    }.to_json, json_headers
+
+    expect(last_response.status).to eq(422)
+  end
+
+  it "rejects order with invalid add-on id" do
+    drink = create(:drink)
+
+    post "/api/v1/orders", {
+      customer_name: "Jordan",
+      items: [{ drink_id: drink.id, quantity: 1, add_on_ids: [999999] }],
+    }.to_json, json_headers
+
+    expect(last_response.status).to eq(422)
+  end
+
+  it "rejects customer name that is too long" do
+    drink = create(:drink)
+
+    post "/api/v1/orders", {
+      customer_name: "A" * 121,
+      items: [{ drink_id: drink.id, quantity: 1, add_on_ids: [] }],
     }.to_json, json_headers
 
     expect(last_response.status).to eq(422)
