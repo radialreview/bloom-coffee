@@ -30,29 +30,57 @@ Our engineers use a rubric when reviewing your submission. You can see what we e
 
 ### Run locally
 
-1. Clone the repo and install dependencies:
+#### macOS
+
+1. Install prerequisites (if not already installed):
+   - [Homebrew](https://brew.sh/)
+   - Ruby 3.2+ (recommended via a version manager such as `rbenv`/`mise`)
+   - Node.js 20.19+ or 22.12+
+2. Clone the repo and install dependencies:
    ```bash
    cd backend && bundle install
    cd ../frontend && npm install
    ```
-2. Configure backend env vars:
+3. Configure backend env vars:
    - Copy `backend/.env.example` to `backend/.env`
    - Update values if needed (`JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `FRONTEND_ORIGIN`)
-3. Run backend migrations + seed:
+4. Run backend migrations + seed:
    ```bash
    cd backend
    bundle exec rake db:migrate db:seed
    ```
-4. Start backend:
+5. Start backend:
    ```bash
    bundle exec rackup -p 4567
    ```
-5. In a second terminal, start frontend:
+6. In a second terminal, start frontend:
    ```bash
    cd frontend
    npm run dev
    ```
-6. Open `http://localhost:5173`.
+7. Open `http://localhost:5173`.
+
+#### Windows
+
+Recommended: run this project through **WSL2 (Ubuntu)** for the smoothest Ruby setup.
+
+1. Install:
+   - WSL2 + Ubuntu
+   - Ruby 3.2+ (inside WSL, recommended via `mise`/`rbenv`)
+   - Node.js 20.19+ or 22.12+ (inside WSL)
+2. From your WSL terminal, follow the same commands as macOS:
+   ```bash
+   cd backend && bundle install
+   cd ../frontend && npm install
+   cd ../backend && bundle exec rake db:migrate db:seed
+   bundle exec rackup -p 4567
+   ```
+   In a second WSL terminal:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+3. Open `http://localhost:5173`.
 
 ### Deploy
 
