@@ -1,0 +1,17 @@
+# Frontend
+frontend/node_modules
+frontend/dist
+frontend/.env
+
+# Ruby backend
+backend/.bundle
+backend/vendor/bundle
+backend/.env
+backend/db/*.sqlite3
+backend/db/*.sqlite3-*
+backend/data/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+frontend/.vite/

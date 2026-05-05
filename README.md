@@ -28,11 +28,70 @@ Our engineers use a rubric when reviewing your submission. You can see what we e
 
 ## How to run (your app)
 
-In your fork, replace this section with clear instructions for reviewers:
+### Run locally
 
-- **Run locally:** How to install dependencies, set any required env vars, and start the app (e.g. `npm start`, `docker-compose up`).
-- **Deploy:** How you deployed it and the URL (or add the live URL in your PR description).
-- **Admin login:** Because sign-up is not required, provide either (a) the credentials to log into the admin section (e.g. username/password for a seed or default admin), or (b) exact steps to create an admin user so we can sign in and test the admin stories. Don't leave this out — we need to access the admin area to review your work.
+#### macOS
+
+1. Install prerequisites (if not already installed):
+   - [Homebrew](https://brew.sh/)
+   - Ruby 3.2+ (recommended via a version manager such as `rbenv`/`mise`)
+   - Node.js 20.19+ or 22.12+
+2. Clone the repo and install dependencies:
+   ```bash
+   cd backend && bundle install
+   cd ../frontend && npm install
+   ```
+3. Configure backend env vars:
+   - Copy `backend/.env.example` to `backend/.env`
+   - Update values if needed (`JWT_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `FRONTEND_ORIGIN`)
+4. Run backend migrations + seed:
+   ```bash
+   cd backend
+   bundle exec rake db:migrate db:seed
+   ```
+5. Start backend:
+   ```bash
+   bundle exec rackup -p 4567
+   ```
+6. In a second terminal, start frontend:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+7. Open `http://localhost:5173`.
+
+#### Windows
+
+Recommended: run this project through **WSL2 (Ubuntu)** for the smoothest Ruby setup.
+
+1. Install:
+   - WSL2 + Ubuntu
+   - Ruby 3.2+ (inside WSL, recommended via `mise`/`rbenv`)
+   - Node.js 20.19+ or 22.12+ (inside WSL)
+2. From your WSL terminal, follow the same commands as macOS:
+   ```bash
+   cd backend && bundle install
+   cd ../frontend && npm install
+   cd ../backend && bundle exec rake db:migrate db:seed
+   bundle exec rackup -p 4567
+   ```
+   In a second WSL terminal:
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+3. Open `http://localhost:5173`.
+
+### Deploy
+
+- **Frontend:** Netlify
+- **Backend + DB:** Render web service + Render Postgres
+- **Live app URL:** [https://cool-pika-d2037a.netlify.app/](https://cool-pika-d2037a.netlify.app/)
+
+### Admin login
+
+- **Email:** `admin@bloom.coffee`
+- **Password:** `password123`
 
 ---
 

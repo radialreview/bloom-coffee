@@ -1,0 +1,29 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  font-family: "Nunito", "Avenir Next", system-ui, -apple-system, sans-serif;
+  background: #f5f0eb;
+  color: #2c1f14;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  line-height: 1.25;
+  font-weight: 600;
+}
+
+input, textarea, button, select {
+  font: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}

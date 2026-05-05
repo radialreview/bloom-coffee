@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="steam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#76b29b" />
+      <stop offset="100%" stop-color="#4f8b74" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#eef4f1" />
+  <path d="M24 17c3 3 3 6 0 9M33 14c3 4 3 8 0 12M41 18c2.5 2.5 2.5 5.5 0 8" stroke="url(#steam)" stroke-width="3.2" stroke-linecap="round" fill="none" />
+  <path d="M14 30h31c0 9.4-5.9 16-14.4 16H28.4C19.9 46 14 39.4 14 30z" fill="#4f8b74" />
+  <path d="M46 33h3.5c3.6 0 6.5 2.9 6.5 6.5S53.1 46 49.5 46H46" stroke="#4f8b74" stroke-width="4" fill="none" stroke-linecap="round" />
+  <ellipse cx="30" cy="53" rx="20" ry="3.5" fill="#d4e3da" />
+</svg>
