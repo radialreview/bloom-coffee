@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAdminCrud } from '../hooks/useAdminCrud'
+import { formatMoney } from '../utils/format'
 
 const EMPTY_FORM = { name: '', price: '' }
 const MAX_NAME_LENGTH = 120
@@ -119,7 +120,7 @@ function AdminAddOnsPage() {
             <article key={addOn.id} className="drink-row">
               <div>
                 <h3>{addOn.name}</h3>
-                <p className="drink-price">${Number(addOn.price).toFixed(2)}</p>
+                <p className="drink-price">{formatMoney(addOn.price)}</p>
               </div>
               <div className="row-actions">
                 <button type="button" className="secondary-button" onClick={() => startEdit(addOn, toFormData)}>

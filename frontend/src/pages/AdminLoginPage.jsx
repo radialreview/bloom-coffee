@@ -29,8 +29,8 @@ function AdminLoginPage() {
   return (
     <main className="page-wrapper">
       <section className="auth-card">
-        <h1>Bloom Coffee Admin</h1>
-        <p className="subtle-text">Sign in to access the protected admin area.</p>
+        <h1>Bloom Coffee</h1>
+        <p className="subtle-text">Sign in to manage your shop.</p>
 
         <form onSubmit={handleSubmit} className="form-stack">
           <label htmlFor="email">Email</label>
@@ -63,7 +63,7 @@ function AdminLoginPage() {
         </form>
 
         <p className="auth-card-footer">
-          Looking for the customer view?{" "}
+          Not an admin?{" "}
           <Link className="card-text-link" to="/menu">
             Open the menu
           </Link>

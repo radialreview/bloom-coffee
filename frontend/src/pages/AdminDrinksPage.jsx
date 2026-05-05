@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useAdminCrud } from '../hooks/useAdminCrud'
+import { formatMoney } from '../utils/format'
 
 const EMPTY_FORM = { name: '', description: '', base_price: '' }
 const MAX_NAME_LENGTH = 120
@@ -125,7 +126,10 @@ function AdminDrinksPage() {
         </form>
 
         <section className="drinks-list">
-          <h2>Current Drinks</h2>
+          <div className="menu-header-row">
+            <h2>Current Drinks</h2>
+            {!isLoading ? <p className="subtle-text">{drinks.length} available</p> : null}
+          </div>
           {isLoading ? <p className="subtle-text">Loading drinks...</p> : null}
           {!isLoading && drinks.length === 0 ? <p className="subtle-text">No drinks yet.</p> : null}
 
@@ -134,7 +138,7 @@ function AdminDrinksPage() {
               <div>
                 <h3>{drink.name}</h3>
                 <p className="subtle-text">{drink.description || 'No description.'}</p>
-                <p className="drink-price">${Number(drink.base_price).toFixed(2)}</p>
+                <p className="drink-price">{formatMoney(drink.base_price)}</p>
               </div>
               <div className="row-actions">
                 <button type="button" className="secondary-button" onClick={() => startEdit(drink, toFormData)}>

@@ -81,77 +81,106 @@ function CustomerMenuPage() {
     <main className="customer-page">
       <header className="customer-header">
         <div>
-          <h1>Bloom Coffee Menu</h1>
-          <p className="subtle-text">Slow morning energy in a cup. Choose your drink and make it yours.</p>
+          <h1>Bloom Coffee</h1>
+          <p className="subtle-text">Good coffee, made your way.</p>
         </div>
-        <Link className="secondary-button inline-link-button" to="/admin/login">
-          Admin login
-        </Link>
+        <div className="row-actions">
+          <Link className="page-footer" to="/admin/login">Log in</Link>
+          {itemCount > 0 ? (
+            <Link className="inline-link-button" to="/order">
+              Review order ({itemCount})
+            </Link>
+          ) : null}
+        </div>
       </header>
 
       {isLoading ? <p className="subtle-text">Loading menu...</p> : null}
       {error ? <p className="error-text">{error}</p> : null}
 
-      <section className="menu-grid">
-        {drinks.map((drink) => (
-          <article key={drink.id} className="menu-card">
-            <h2>{drink.name}</h2>
-            <p className="subtle-text">{drink.description || 'No description.'}</p>
-            <p className="drink-price">{formatMoney(drink.base_price)}</p>
-            <button type="button" onClick={() => openCustomizer(drink.id)}>
-              Customize
-            </button>
-          </article>
-        ))}
+      <section className="menu-hero">
+        <h2>Let&apos;s make something you&apos;ll love.</h2>
+        <p className="subtle-text">Pick a drink, add your extras, and we&apos;ll have it ready for you.</p>
       </section>
 
-      {activeDrink ? (
-        <section ref={customizerRef} className="customizer-card">
-          <h2>Customize {activeDrink.name}</h2>
-          <p className="subtle-text">Select add-ons and preview line total.</p>
+      <hr className="menu-divider" />
 
-          <div className="add-ons-grid">
-            {addOns.map((addOn) => (
-              <label key={addOn.id} className="add-on-option">
-                <input
-                  type="checkbox"
-                  checked={selectedAddOnIds.includes(addOn.id)}
-                  onChange={() => toggleAddOn(addOn.id)}
-                />
-                <span>
-                  {addOn.name} ({formatMoney(addOn.price)})
-                </span>
-              </label>
+      <section className="menu-layout">
+        <div className="drinks-list">
+          <div className="menu-header-row">
+            <p className="menu-chip">Our menu</p>
+          </div>
+          <div className="menu-grid">
+            {drinks.map((drink) => (
+              <article key={drink.id} className="menu-card">
+                <h3>{drink.name}</h3>
+                <p className="subtle-text">{drink.description || 'No description.'}</p>
+                <div className="customizer-footer">
+                  <p className="drink-price">{formatMoney(drink.base_price)}</p>
+                  <button type="button" onClick={() => openCustomizer(drink.id)}>
+                    Customize
+                  </button>
+                </div>
+              </article>
             ))}
           </div>
+        </div>
 
-          <div className="customizer-footer">
-            <p>
-              Line total: <strong>{formatMoney(activeLineTotal)}</strong>
-            </p>
-            <div className="row-actions">
-              <button type="button" className="secondary-button" onClick={() => setActiveDrinkId(null)}>
-                Cancel
-              </button>
-              <button type="button" onClick={addActiveDrinkToOrder}>
-                Add to order
-              </button>
+        {activeDrink ? (
+          <section ref={customizerRef} className="customizer-card">
+            <h2>{activeDrink.name}</h2>
+            <p className="subtle-text">Add extras to your drink.</p>
+
+            {addOns.length > 0 ? (
+              <div className="add-ons-grid">
+                {addOns.map((addOn) => (
+                  <label key={addOn.id} className="add-on-option">
+                    <input
+                      type="checkbox"
+                      checked={selectedAddOnIds.includes(addOn.id)}
+                      onChange={() => toggleAddOn(addOn.id)}
+                    />
+                    <span>
+                      {addOn.name} <span className="subtle-text">+{formatMoney(addOn.price)}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+            ) : (
+              <p className="subtle-text">No add-ons available right now.</p>
+            )}
+
+            <div className="customizer-footer">
+              <p>
+                <strong>{formatMoney(activeLineTotal)}</strong>
+              </p>
+              <div className="row-actions">
+                <button type="button" className="secondary-button" onClick={() => setActiveDrinkId(null)}>
+                  Cancel
+                </button>
+                <button type="button" onClick={addActiveDrinkToOrder}>
+                  Add to order
+                </button>
+              </div>
             </div>
-          </div>
-        </section>
-      ) : null}
+          </section>
+        ) : (
+          <section className="customizer-card">
+            <h2>Your drink</h2>
+            <p className="subtle-text">Tap any drink on the menu to start customizing.</p>
+          </section>
+        )}
+      </section>
 
-      <footer className="order-summary-bar">
-        <p>
-          {itemCount} item{itemCount === 1 ? '' : 's'} in order
-        </p>
-        <p>
-          Total: <strong>{formatMoney(total)}</strong>
-        </p>
-        <Link className="inline-link-button" to="/order">
-          Review order
-        </Link>
-      </footer>
+      {itemCount > 0 ? (
+        <footer className="order-summary-bar">
+          <p>
+            {itemCount} item{itemCount === 1 ? '' : 's'} &middot; <strong>{formatMoney(total)}</strong>
+          </p>
+          <Link className="inline-link-button" to="/order">
+            Review &amp; checkout
+          </Link>
+        </footer>
+      ) : null}
     </main>
   )
 }

@@ -53,7 +53,7 @@ function CustomerOrderPage() {
       <header className="customer-header">
         <div>
           <h1>Your Order</h1>
-          <p className="subtle-text">Take a quick look before we start brewing.</p>
+          <p className="subtle-text">Review everything before we start brewing.</p>
         </div>
         <Link className="secondary-button inline-link-button" to="/menu">
           Back to menu
@@ -62,74 +62,69 @@ function CustomerOrderPage() {
 
       {items.length === 0 ? (
         <section className="empty-state-card">
-          <p>Your order is empty.</p>
+          <h2>Nothing here yet</h2>
+          <p className="subtle-text">Head back to the menu to build your perfect order.</p>
           <Link className="inline-link-button" to="/menu">
-            Start adding drinks
+            Browse the menu
           </Link>
         </section>
       ) : (
-        <section className="drinks-list">
-          {items.map((item) => (
-            <article key={item.id} className="drink-row">
-              <div>
-                <h2>{item.drink.name}</h2>
-                <p className="subtle-text">
-                  Base {formatMoney(item.drink.base_price)}
-                  {item.addOns.length > 0
-                    ? ` + ${item.addOns.map((addOn) => `${addOn.name} (${formatMoney(addOn.price)})`).join(', ')}`
-                    : ' (no add-ons)'}
-                </p>
-                <p className="drink-price">Line total: {formatMoney(item.lineTotal)}</p>
-              </div>
+        <>
+          <section className="drinks-list">
+            {items.map((item) => (
+              <article key={item.id} className="drink-row">
+                <div>
+                  <h3>{item.drink.name}</h3>
+                  <p className="subtle-text">
+                    {formatMoney(item.drink.base_price)}
+                    {item.addOns.length > 0
+                      ? ` + ${item.addOns.map((addOn) => addOn.name).join(', ')}`
+                      : ''}
+                  </p>
+                  <p className="drink-price">{formatMoney(item.lineTotal)}</p>
+                </div>
 
-              <div className="row-actions">
-                <button type="button" className="secondary-button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                  -
-                </button>
-                <span className="quantity-pill">{item.quantity}</span>
-                <button type="button" className="secondary-button" disabled={item.quantity >= 20} onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                  +
-                </button>
-                <button type="button" className="danger-button" onClick={() => removeItem(item.id)}>
-                  Remove
-                </button>
-              </div>
-            </article>
-          ))}
-        </section>
+                <div className="row-actions">
+                  <button type="button" className="secondary-button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                    &minus;
+                  </button>
+                  <span className="quantity-pill">{item.quantity}</span>
+                  <button type="button" className="secondary-button" disabled={item.quantity >= 20} onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                    +
+                  </button>
+                  <button type="button" className="danger-button" onClick={() => removeItem(item.id)}>
+                    Remove
+                  </button>
+                </div>
+              </article>
+            ))}
+          </section>
+
+          <section className="checkout-card">
+            <h2>Almost there</h2>
+            <p className="subtle-text">
+              {itemCount} item{itemCount === 1 ? '' : 's'} &middot; <strong>{formatMoney(total)}</strong>
+            </p>
+            <label htmlFor="customer-name">Name for pickup</label>
+            <input
+              id="customer-name"
+              value={customerName}
+              onChange={(event) => setCustomerName(event.target.value)}
+              placeholder="What should we call out?"
+              maxLength={MAX_CUSTOMER_NAME_LENGTH}
+              required
+            />
+            {submitError ? <p className="error-text">{submitError}</p> : null}
+            <button
+              type="button"
+              onClick={handleSubmitOrder}
+              disabled={isSubmitting || customerName.trim().length === 0}
+            >
+              {isSubmitting ? 'Placing order...' : 'Place order'}
+            </button>
+          </section>
+        </>
       )}
-
-      <footer className="order-summary-bar">
-        <p>
-          {itemCount} item{itemCount === 1 ? '' : 's'} in order
-        </p>
-        <p>
-          Total: <strong>{formatMoney(total)}</strong>
-        </p>
-      </footer>
-
-      {items.length > 0 ? (
-        <section className="checkout-card">
-          <h2>Checkout</h2>
-          <label htmlFor="customer-name">Name for pickup</label>
-          <input
-            id="customer-name"
-            value={customerName}
-            onChange={(event) => setCustomerName(event.target.value)}
-            placeholder="What should we call out?"
-            maxLength={MAX_CUSTOMER_NAME_LENGTH}
-            required
-          />
-          {submitError ? <p className="error-text">{submitError}</p> : null}
-          <button
-            type="button"
-            onClick={handleSubmitOrder}
-            disabled={isSubmitting || customerName.trim().length === 0}
-          >
-            {isSubmitting ? 'Placing order...' : 'Place order'}
-          </button>
-        </section>
-      ) : null}
     </main>
   )
 }

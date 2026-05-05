@@ -38,18 +38,20 @@ function OrderConfirmationPage() {
     <main className="customer-page">
       <header className="customer-header">
         <div>
-          <h1>Order Confirmed</h1>
+          <h1>You&apos;re all set!</h1>
           <p className="subtle-text">Thanks for stopping by Bloom Coffee.</p>
         </div>
       </header>
 
-      {isLoading ? <p className="subtle-text">Loading confirmation...</p> : null}
+      {isLoading ? <p className="subtle-text">Loading your confirmation...</p> : null}
       {error ? <p className="error-text">{error}</p> : null}
 
       {order ? (
         <section className="confirmation-card">
           <h2>Order #{order.order_number}</h2>
-          <p className="subtle-text">We'll call {order.customer_name} when your order is ready.</p>
+          <p className="subtle-text">
+            We&apos;ll call out <strong>{order.customer_name}</strong> when it&apos;s ready.
+          </p>
 
           <div className="drinks-list">
             {order.items.map((item, index) => (
@@ -59,8 +61,8 @@ function OrderConfirmationPage() {
                   <p className="subtle-text">
                     Qty {item.quantity}
                     {item.add_ons.length > 0
-                      ? ` + ${item.add_ons.map((addOn) => `${addOn.name} (${formatMoney(addOn.price)})`).join(', ')}`
-                      : ' (no add-ons)'}
+                      ? ` + ${item.add_ons.map((addOn) => addOn.name).join(', ')}`
+                      : ''}
                   </p>
                 </div>
                 <p className="drink-price">{formatMoney(item.line_total)}</p>
@@ -75,7 +77,7 @@ function OrderConfirmationPage() {
       ) : null}
 
       <Link className="inline-link-button" to="/menu">
-        Start another order
+        Order something else
       </Link>
     </main>
   )
