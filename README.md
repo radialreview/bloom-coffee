@@ -1,17 +1,32 @@
 # Bloom Coffee — Candidate Code Exercise
 
-Welcome! This repo contains the exercise brief for **Bloom Coffee**, a small coffee-shop ordering app. Your job is to implement the stories below, deploy the app somewhere we can use it, and open a pull request. You may use any language, framework, or tools (including AI). We care about clarity, structure, and that it runs.
+Welcome! This repo contains the exercise brief for **Bloom Coffee**, a small coffee-shop ordering app. Your job is to implement the stories below, deploy the app somewhere we can use it, and submit it for review. You may use any language, framework, or tools (including AI). We care about clarity, structure, and that it runs.
 
 **Key docs:** [STORIES.md](STORIES.md) (stories & acceptance criteria) · [RUBRIC.md](RUBRIC.md) (what we look for when reviewing)
 
 ---
 
+## Submission — please read first (privacy)
+
+We know job-hunting is private. The flow below keeps your application invisible to anyone browsing your GitHub.
+
+1. **Click "Use this template"** (above the file list on this repo) to create your own copy. **Use the template button, not Fork** — a fork creates a public link back to Bloom Growth on your profile. The template button does not.
+2. **Make your new repo private** in the repo settings.
+3. (Optional but recommended) Use a GitHub account separate from your day-job account.
+4. Build your solution. When you're ready, open a PR **within your own repo** (feature branch → main) — we'll use it to review your changes diff-by-diff.
+5. **Invite our reviewer account** as a collaborator with read access on your private repo. The account to invite is: **`bloom-coffee-reviews`** _(replace with your actual reviewer account)_.
+6. Reply to Mike's email with: the **URL of your repo**, the **URL of your PR**, **admin login credentials** (or how to create an admin), and optionally your **tech stack** and any **trade-offs or decisions** you want us to know about.
+
+We will never link to or reference your repo publicly.
+
+---
+
 ## What we expect
 
-1. **Fork this repo** and implement the stories in `STORIES.md`.
+1. Implement the stories in [STORIES.md](STORIES.md).
 2. **Deploy** the app to a URL we can open (e.g. Vercel, Railway, Fly.io, your own server). No payment processing required.
 3. The **customer-facing flow** (menu, order, confirmation) should be **mobile-friendly**: usable and readable on both phone and desktop. Admin can be desktop-only if you prefer.
-4. **Open a pull request** back to our repo. In the PR description, include: **link to your deployed app**, **admin login credentials** (or how to create an admin), and optionally your **tech stack** and any **trade-offs or decisions** you want us to know about.
+4. Submit per the **Submission** section above.
 5. Our engineers will review your code and deployment. If we move forward, **Phase 2** will be a pairing session where you propose one or two features that would add business value to Bloom Coffee, we'll do a short planning together, and then you'll implement and deploy those with us.
 
 **Time:** We've scoped this for about **2–3 hours** of focused work. You're welcome to take longer if you'd like—we'd rather you finish at your pace than feel rushed. We've kept the scope intentional so you can complete it without an overwhelming commitment. Please submit within one week of receiving this exercise.
